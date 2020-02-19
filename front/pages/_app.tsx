@@ -9,15 +9,11 @@ import { applyMiddleware, compose, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
 import createSagaMiddleware from "redux-saga";
 import axios from "axios";
-import dotenv from "dotenv";
-
 import reducer from "../reducers";
 import rootSaga from "../sagas";
 import { store } from "../reducers/indext.type";
 import { alertOptions } from "../config/alert";
 import "./styles.scss";
-
-dotenv.config();
 
 const App = ({ Component, store, pageProps }) => {
   return (

@@ -3,8 +3,10 @@ import { withAlert } from "react-alert";
 import io from "socket.io-client";
 import {
   getUserMediaContraints,
-  RTCPeerConnectionConfig
+  RTCPeerConnectionConfig,
+  offerAndAnswerOptions
 } from "../config/webrtc";
+import { webrtc_config } from "../config/api";
 
 type Props = { alert: any };
 type States = { isCallDisable: boolean; connectionSuccess: boolean };
@@ -27,8 +29,8 @@ class room extends Component<Props, States> {
 
   // handling peerconnection
   handlePeerConnection() {
-    this.socket = io(process.env.SERVER_URL, {
-      path: "/webrtc"
+    this.socket = io(webrtc_config.server, {
+      path: webrtc_config.path
     });
 
     this.socket.on("connection-success", success => {
@@ -39,7 +41,7 @@ class room extends Component<Props, States> {
       this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
       this.props.alert.show("answer the call");
       console.log("answer");
-      this.pc.createAnswer({ offerToReceiveAudio: true }).then(sdp => {
+      this.pc.createAnswer(offerAndAnswerOptions).then(sdp => {
         // console.log(JSON.stringify(sdp))
         // set answer sdp as local description
         this.pc.setLocalDescription(sdp);
@@ -51,6 +53,7 @@ class room extends Component<Props, States> {
     });
 
     this.socket.on("candidate", candidate => {
+      console.log("add ice");
       this.pc.addIceCandidate(new RTCIceCandidate(candidate));
     });
 
@@ -93,7 +96,7 @@ class room extends Component<Props, States> {
     console.log("offer");
     // https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createOffer
     // initiates the creation of SDP
-    this.pc.createOffer({ offerToReceiveAudio: true }).then(sdp => {
+    this.pc.createOffer(offerAndAnswerOptions).then(sdp => {
       // console.log(JSON.stringify(sdp))
       // set offer sdp as local description
       this.pc.setLocalDescription(sdp);
@@ -111,8 +114,25 @@ class room extends Component<Props, States> {
   render() {
     return (
       <div>
-        <video id="local-video" ref={this.localVideoRef} autoPlay />
-        <video id="remote-video" ref={this.remoteVideoRef} autoPlay />
+        <video
+          id="local-video"
+          style={{ width: 100, height: 100, backgroundColor: "black" }}
+          ref={this.localVideoRef}
+          autoPlay
+          playsInline
+        />
+        <video
+          id="remote-video"
+          style={{
+            width: 100,
+            height: 100,
+            marginLeft: 10,
+            backgroundColor: "black"
+          }}
+          ref={this.remoteVideoRef}
+          autoPlay
+          playsInline
+        />
         <button
           onClick={this._onCallButton}
           disabled={this.state.isCallDisable}

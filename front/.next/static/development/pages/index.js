@@ -2193,7 +2193,7 @@ function (_Component) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 2:
 /*!********************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fgadamer1%2FDocuments%2Fwebdev%2Fkpmg%2Ffront%2Fpages%2Findex.tsx ***!
   \********************************************************************************************************************************************/
@@ -2216,5 +2216,5 @@ module.exports = dll_ef0ff7c60362f24a921f;
 
 /***/ })
 
-},[[3,"static/runtime/webpack.js"]]]);
+},[[2,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

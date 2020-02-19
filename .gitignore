@@ -128,9 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Backend
-back/node_modules
-back/package-lock.json
-back/yarn.lock
-back/src/config/store
-back/yarn-error.log
+# npm package
+node_modules

@@ -1,0 +1,22 @@
+@mixin fontface($family, $localname, $localname2, $filename, $weight, $style) {
+  @font-face {
+    font-display: swap;
+    font-family: $family;
+    src: local("#{$localname}"), local("#{$localname2}"),
+      url("/assets/fonts/#{$filename}.woff2") format("woff2"),
+      url("/assets/fonts/#{$filename}.woff") format("woff");
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
+
+div {
+  @include fontface(
+    Segoe UI,
+    Segoe UI Regular,
+    SegoeUI-Regular,
+    SegoeUIRegular,
+    400,
+    normal
+  );
+}

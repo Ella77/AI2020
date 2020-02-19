@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/token.js",
+    "Components/PostList/PostListContainer.jsx",
+    "Components/draft/Renderer.js",
+    "Components/home/About.js",
+    "Components/home/Work.js",
+    "Components/home/Project.js",
+    "Components/home/Navbar.js",
+    "Components/home/Home.js",
+    "Components/home/Contact.js",
+    "Components/admin/MakePosts/CodeBlock.js"
+  ]
+}

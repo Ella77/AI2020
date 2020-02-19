@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import STT from "../components/stt/STT";
 
 class index extends Component {
   constructor(props) {
@@ -8,7 +9,12 @@ class index extends Component {
   }
 
   render() {
-    return <div>hello world</div>;
+    return (
+      <div>
+        hello world
+        <STT />
+      </div>
+    );
   }
 }
 

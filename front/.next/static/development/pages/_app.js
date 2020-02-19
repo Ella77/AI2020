@@ -22862,18 +22862,25 @@ var App = function App(_ref) {
       lineNumber: 22
     },
     __self: this
-  }, "kpmg")), __jsx(react_alert__WEBPACK_IMPORTED_MODULE_4__["Provider"], Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__["default"])({
+  }, "kpmg"), __jsx("script", {
+    src: "microsoft.cognitiveservices.speech.sdk.bundle.js",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 23
+    },
+    __self: this
+  })), __jsx(react_alert__WEBPACK_IMPORTED_MODULE_4__["Provider"], Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__["default"])({
     template: react_alert_template_basic__WEBPACK_IMPORTED_MODULE_5__["default"]
   }, _config_alert__WEBPACK_IMPORTED_MODULE_15__["alertOptions"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 25
     },
     __self: this
   }), __jsx(Component, Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__["default"])({}, pageProps, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 26
     },
     __self: this
   }))));

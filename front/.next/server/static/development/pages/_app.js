@@ -198,18 +198,25 @@ const App = ({
       lineNumber: 22
     },
     __self: undefined
-  }, "kpmg")), __jsx(react_alert__WEBPACK_IMPORTED_MODULE_2__["Provider"], _extends({
+  }, "kpmg"), __jsx("script", {
+    src: "microsoft.cognitiveservices.speech.sdk.bundle.js",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 23
+    },
+    __self: undefined
+  })), __jsx(react_alert__WEBPACK_IMPORTED_MODULE_2__["Provider"], _extends({
     template: react_alert_template_basic__WEBPACK_IMPORTED_MODULE_3___default.a
   }, _config_alert__WEBPACK_IMPORTED_MODULE_13__["alertOptions"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 25
     },
     __self: undefined
   }), __jsx(Component, _extends({}, pageProps, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 26
     },
     __self: undefined
   }))));

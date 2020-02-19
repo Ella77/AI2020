@@ -20,6 +20,7 @@ const App = ({ Component, store, pageProps }) => {
     <Provider store={store}>
       <Head>
         <title>kpmg</title>
+        <script src="microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
       </Head>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
         <Component {...pageProps} />

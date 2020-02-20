@@ -14,15 +14,25 @@ import rootSaga from "../sagas";
 import { store } from "../reducers/indext.type";
 import { alertOptions } from "../config/alert";
 import "./styles.scss";
+import "./agenda.scss";
+import AppLayout from "../Layouts/AppLayout";
 
 const App = ({ Component, store, pageProps }) => {
   return (
     <Provider store={store}>
       <Head>
         <title>kpmg</title>
+        <script src="microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.js"></script>
       </Head>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
-        <Component {...pageProps} />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       </AlertProvider>
     </Provider>
   );

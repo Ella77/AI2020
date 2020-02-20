@@ -5,12 +5,12 @@ import {
   getUserMediaContraints,
   RTCPeerConnectionConfig,
   offerAndAnswerOptions
-} from "../config/webrtc";
-import { webrtc_config } from "../config/api";
+} from "../../../../config/webrtc";
+import { webrtc_config } from "../../../../config/api";
 
 type Props = { alert: any };
 type States = { isCallDisable: boolean; connectionSuccess: boolean };
-class room extends Component<Props, States> {
+class Audio extends Component<Props, States> {
   //types
   localVideoRef: React.RefObject<HTMLVideoElement>;
   remoteVideoRef: React.RefObject<HTMLVideoElement>;
@@ -29,9 +29,7 @@ class room extends Component<Props, States> {
 
   // handling peerconnection
   handlePeerConnection() {
-    this.socket = io(webrtc_config.server, {
-      path: webrtc_config.path
-    });
+    this.socket = io(webrtc_config.server);
 
     this.socket.on("connection-success", success => {
       console.log(success);
@@ -144,4 +142,4 @@ class room extends Component<Props, States> {
   }
 }
 
-export default withAlert()(room);
+export default withAlert()(Audio);

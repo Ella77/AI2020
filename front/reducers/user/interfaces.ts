@@ -7,18 +7,20 @@ import {
   SIGN_UP_FAILURE,
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
-  LOAD_USER_FAILURE
+  LOAD_USER_FAILURE,
+  LOGOUT
 } from "./actions";
 
 ///////////////STATES////////////////
 
 /*USER STATE */
 export interface user {
+  meetings: string;
   _id: string;
+  loginId: string;
   nickname: string;
-  email: string;
-  emailVerified: boolean;
-  admin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 /* 로딩 상태 */
@@ -42,15 +44,14 @@ export interface metaStates {
 export interface loginRequestAction {
   type: typeof LOGIN_REQUEST;
   payload: {
-    email: string;
-    password: string;
+    loginId: string;
+    plainPassword: string;
   };
 }
 export interface loginSuccessAction {
   type: typeof LOGIN_SUCCESS;
   result: {
     user: user;
-    "X-Access-Token": string;
   };
 }
 export interface loginFailureAction {
@@ -62,8 +63,8 @@ export interface loginFailureAction {
 export interface signUpRequsetAction {
   type: typeof SIGN_UP_REQUEST;
   payload: {
-    email: string;
-    password: string;
+    loginId: string;
+    plainPassword: string;
     nickname: string;
   };
 }
@@ -92,6 +93,10 @@ export interface loadUserFailureAction {
   type: typeof LOAD_USER_FAILURE;
 }
 
+export interface logoutAction {
+  type: typeof LOGOUT;
+}
+
 export type userActions =
   | loginRequestAction
   | loginSuccessAction
@@ -101,7 +106,8 @@ export type userActions =
   | signUpFailureAction
   | loadUserRequestAction
   | loadUserSuccessAction
-  | loadUserFailureAction;
+  | loadUserFailureAction
+  | logoutAction;
 
 export interface userStore {
   me: user | null;

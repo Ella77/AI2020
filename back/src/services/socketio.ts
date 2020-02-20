@@ -10,7 +10,7 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
   type userId = string;
   type meetingId = string;
 
-  const roomSet = new Map<socketId, [userId, meetingId]>();
+  const socketEnterInfo = new Map<socketId, [userId, meetingId]>();
 
   io.on("connection", (socket) => {
     socket.emit("connection-success", socket.id);
@@ -38,14 +38,14 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
         return socket.emit('enter', {success: false, msg: 'Wrong meetingId'});
       }
       socket.join(meetingId);
-      roomSet.set(socket.id, [user._id.toString(), meetingId._id.toString()]);
+      socketEnterInfo.set(socket.id, [user._id.toString(), meetingId._id.toString()]);
       socket.emit('enter', {success: true});
     });
 
     socket.use((packet, next) => {
-      console.log(!roomSet.get(socket.id));
+      console.log(!socketEnterInfo.get(socket.id));
       console.log(packet[0] !== 'enter');
-      if (!roomSet.get(socket.id) && packet[0] !== 'enter') {
+      if (!socketEnterInfo.get(socket.id) && packet[0] !== 'enter') {
         console.log(1);
         next(new Error('Not entered'));
       } else {
@@ -55,24 +55,34 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
     ///////////////////////////////////////////////////////////////
 
     socket.on("offer", data => {
-      const room = roomSet.get(socket.id);
-      socket.broadcast.to(room![1]).emit('offer', data.payload);
+      const enterInfo = socketEnterInfo.get(socket.id);
+      socket.broadcast.to(enterInfo![1]).emit('offer', data.payload);
     });
     socket.on("answer", data => {
-      const room = roomSet.get(socket.id);
-      socket.broadcast.to(room![1]).emit('answer', data.payload);
+      const enterInfo = socketEnterInfo.get(socket.id);
+      socket.broadcast.to(enterInfo![1]).emit('answer', data.payload);
     });
     socket.on("candidate", data => {
-      const room = roomSet.get(socket.id);
-      socket.broadcast.to(room![1]).emit('candidate', data.payload);
+      const enterInfo = socketEnterInfo.get(socket.id);
+      socket.broadcast.to(enterInfo![1]).emit('candidate', data.payload);
     });
 
     /////////////////////////////////////////////////////////////////
 
+    socket.on('stateChange', data => { // 상태 변화 알림 relay
+      const enterInfo = socketEnterInfo.get(socket.id);
+      socket.broadcast.to(enterInfo![1]).emit('stateChange', data);
+    });
 
     socket.on("disconnect", () => {
       console.log("disconnected");
-      roomSet.delete(socket.id);
+      const enterInfo = socketEnterInfo.get(socket.id);
+      if (enterInfo) {
+        socket.broadcast.to(enterInfo![1]).emit('stateChange', {
+          'offline': enterInfo[0]
+        });
+      }
+      socketEnterInfo.delete(socket.id);
     });
   });
 };

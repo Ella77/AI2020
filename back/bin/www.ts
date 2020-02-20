@@ -5,7 +5,8 @@
 
 import app from "../src/app";
 import http from "http";
-import { Socket } from "socket.io";
+import socketIo from 'socket.io';
+import {handShakeForWebRTC} from '../src/services/socketio';
 
 /**
  * Get port from environment and store in Express.
@@ -20,12 +21,13 @@ app.set("port", port);
  */
 
 const server = http.createServer(app);
+const io = socketIo(server);
+handShakeForWebRTC(io);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-const a = server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
 
@@ -85,48 +87,4 @@ function onListening() {
   console.log("Listening on " + bind);
 }
 
-// socket
 
-const io = require("socket.io")({ path: "/room" });
-io.listen(a);
-const peers = io.of("/room");
-
-let connectedPeers = new Map();
-
-peers.on("connection", (socket: Socket) => {
-  console.log(socket.id);
-
-  socket.emit("connection-success", socket.id);
-
-  connectedPeers.set(socket.id, socket);
-
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-    connectedPeers.delete(socket.id);
-  });
-
-  socket.on("offer", data => {
-    for (const [socketID, socket] of connectedPeers.entries()) {
-      if (socketID !== data.socketID) {
-        console.log(socketID, data.payload.type);
-        socket.emit("offer", data.payload);
-      }
-    }
-  });
-  socket.on("answer", data => {
-    for (const [socketID, socket] of connectedPeers.entries()) {
-      if (socketID !== data.socketID) {
-        console.log(socketID, data.payload.type);
-        socket.emit("answer", data.payload);
-      }
-    }
-  });
-  socket.on("candidate", data => {
-    for (const [socketID, socket] of connectedPeers.entries()) {
-      if (socketID !== data.socketID) {
-        console.log("candidate", socketID);
-        socket.emit("candidate", data.payload);
-      }
-    }
-  });
-});

@@ -28,6 +28,7 @@
     "Components/home/Navbar.js",
     "Components/home/Home.js",
     "Components/home/Contact.js",
-    "Components/admin/MakePosts/CodeBlock.js"
+    "Components/admin/MakePosts/CodeBlock.js",
+    "pages/room.js"
   ]
 }

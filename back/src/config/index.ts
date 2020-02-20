@@ -54,6 +54,14 @@ export function getValue(key: keys): any {
     return config.frontURL;
   case 'backURL':
     return config.backURL;
+  case 'textKey':
+    return config.textKey;
+  case 'bingKey':
+    return config.bingKey;
+  case 'textEndpoint':
+    return config.textEndpoint;
+  case 'bingEndpoint':
+      return config.bingEndpoint;
   default:
     throw new Error(`${key} is not in config`);
   }
@@ -69,6 +77,16 @@ export async function set(key: keys, value: any) {
     break;
   case 'backURL':
     config.backURL = value;
+    break;
+  case 'textKey':
+    config.textKey = value;
+  case 'bingKey':
+    config.bingKey = value;
+    break;
+  case 'textEndpoint':
+    config.textEndpoint = value;
+  case 'bingEndpoint':
+    config.bingEndpoint = value;
     break;
   default:
     throw new Error(`${key} is not in config`);

@@ -1,11 +1,20 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { store } from "../../reducers/indext.type";
+import AudioP2P from "../../components/webrtc/AudioP2P";
+import STT from "../../components/stt/STT";
 
 const MeetingID = () => {
-  const { currentConference } = useSelector((state: store) => state.agenda);
+  const { currentAgendas, currentMeeting } = useSelector(
+    (state: store) => state.meeting.meeting
+  );
 
-  return <div></div>;
+  return (
+    <div>
+      <AudioP2P />
+      <STT />
+    </div>
+  );
 };
 
 export default MeetingID;

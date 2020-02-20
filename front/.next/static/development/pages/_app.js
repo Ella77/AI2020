@@ -21237,7 +21237,7 @@ module.exports = assign;
 /*!***********************************************************************!*\
   !*** ./node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js ***!
   \***********************************************************************/
-/*! exports provided: default, CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel */
+/*! exports provided: CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23950,7 +23950,11 @@ __webpack_require__.r(__webpack_exports__);
 var initialState = {
   meeting: {
     meetings: null,
-    currentMeeting: null,
+    currentMeeting: {
+      id: null,
+      agendas: null,
+      name: null
+    },
     currentAgendas: []
   },
   loadingStates: {
@@ -23986,7 +23990,7 @@ var initialState = {
       case _actions__WEBPACK_IMPORTED_MODULE_1__["CREATE_MEETING_SUCCESS"]:
         {
           draft.loadingStates.isCreatingMeeting = false;
-          break;
+          draft.meeting.currentMeeting.id = action.result;
         }
 
       case _actions__WEBPACK_IMPORTED_MODULE_1__["CREATE_MEETING_FAILURE"]:
@@ -24162,11 +24166,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-saga/effects */ "./node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js");
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./user */ "./sagas/user.ts");
+/* harmony import */ var _meeting__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./meeting */ "./sagas/meeting.ts");
 
 
 var _marked =
 /*#__PURE__*/
 _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(rootSaga);
+
 
 
 
@@ -24176,7 +24182,7 @@ function rootSaga() {
       switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["fork"])(_user__WEBPACK_IMPORTED_MODULE_2__["default"])]);
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["fork"])(_user__WEBPACK_IMPORTED_MODULE_2__["default"]), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["fork"])(_meeting__WEBPACK_IMPORTED_MODULE_3__["default"])]);
 
         case 2:
         case "end":
@@ -24184,6 +24190,136 @@ function rootSaga() {
       }
     }
   }, _marked);
+}
+
+/***/ }),
+
+/***/ "./sagas/meeting.ts":
+/*!**************************!*\
+  !*** ./sagas/meeting.ts ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return meetingSaga; });
+/* harmony import */ var _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/regenerator */ "./node_modules/@babel/runtime-corejs2/regenerator/index.js");
+/* harmony import */ var _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-saga/effects */ "./node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_meetingDummyData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/meetingDummyData */ "./utils/meetingDummyData.ts");
+/* harmony import */ var _config_env__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/env */ "./config/env.ts");
+/* harmony import */ var _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../reducers/meeting/actions */ "./reducers/meeting/actions.ts");
+
+
+var _marked =
+/*#__PURE__*/
+_babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(createMeeting),
+    _marked2 =
+/*#__PURE__*/
+_babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(watchCreateMeeting),
+    _marked3 =
+/*#__PURE__*/
+_babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(meetingSaga);
+
+
+
+
+
+
+
+function createMeetingAPI(data) {
+  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/meetings", data, {
+    withCredentials: true
+  });
+}
+
+function createMeeting(action) {
+  var result;
+  return _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function createMeeting$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.prev = 0;
+
+          if (!(_config_env__WEBPACK_IMPORTED_MODULE_4__["development_mode"] !== "development")) {
+            _context.next = 7;
+            break;
+          }
+
+          _context.next = 4;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["call"])(createMeetingAPI, action.payload);
+
+        case 4:
+          _context.t0 = _context.sent;
+          _context.next = 8;
+          break;
+
+        case 7:
+          _context.t0 = _utils_meetingDummyData__WEBPACK_IMPORTED_MODULE_3__["meetingCreateResponse"];
+
+        case 8:
+          result = _context.t0;
+          _context.next = 11;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
+            type: _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_MEETING_SUCCESS"],
+            result: result.data.meeting
+          });
+
+        case 11:
+          _context.next = 18;
+          break;
+
+        case 13:
+          _context.prev = 13;
+          _context.t1 = _context["catch"](0);
+          console.error(_context.t1);
+          _context.next = 18;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
+            type: _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_MEETING_FAILURE"],
+            error: _context.t1
+          });
+
+        case 18:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _marked, null, [[0, 13]]);
+}
+
+function watchCreateMeeting() {
+  return _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function watchCreateMeeting$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["takeLatest"])(_reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_MEETING_REQUEST"], createMeeting);
+
+        case 2:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, _marked2);
+}
+
+function meetingSaga() {
+  return _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function meetingSaga$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["fork"])(watchCreateMeeting)]);
+
+        case 2:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  }, _marked3);
 }
 
 /***/ }),
@@ -24474,6 +24610,24 @@ function userSaga() {
     }
   }, _marked7);
 }
+
+/***/ }),
+
+/***/ "./utils/meetingDummyData.ts":
+/*!***********************************!*\
+  !*** ./utils/meetingDummyData.ts ***!
+  \***********************************/
+/*! exports provided: meetingCreateResponse */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meetingCreateResponse", function() { return meetingCreateResponse; });
+var meetingCreateResponse = {
+  data: {
+    meeting: "5e4e3b73810c205e5c028ffb"
+  }
+};
 
 /***/ }),
 

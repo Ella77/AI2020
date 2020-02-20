@@ -11,7 +11,11 @@ import {
 const initialState: meetingStore = {
   meeting: {
     meetings: null,
-    currentMeeting: null,
+    currentMeeting: {
+      id: null,
+      agendas: null,
+      name: null
+    },
     currentAgendas: []
   },
   loadingStates: {
@@ -40,8 +44,7 @@ export default (state = initialState, action) => {
       }
       case CREATE_MEETING_SUCCESS: {
         draft.loadingStates.isCreatingMeeting = false;
-
-        break;
+        draft.meeting.currentMeeting.id = action.result;
       }
       case CREATE_MEETING_FAILURE: {
         draft.loadingStates.isCreatingMeeting = false;

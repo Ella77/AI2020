@@ -8,6 +8,7 @@ type agenda = {
 };
 
 type meeting = {
+  id: string;
   name: string;
   agendas: agenda[];
 };

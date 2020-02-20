@@ -2,11 +2,17 @@ import {UserModel, User} from '../model/user';
 import {hash, jwtSign} from '../utils/auth';
 
 /**
+ * @typedef {Object} SignResult
+ * @property {string} loginJwt - 사용자 인증에 사용할 jwt, user: user 도큐먼트
+ * @property {User} y - user 도큐먼트
+ */
+
+/**
  * @description 회원가입
  * @param loginId 로그인에 사용할 id
  * @param plainPassword 비밀번호
  * @param nickname 닉네임
- * @returns loginJwt string, 사용자 인증에 사용할 jwt
+ * @return {SignResult}
  */
 export const signUp = async (loginId: string, plainPassword: string, nickname: string) => {
   const user = await UserModel.create({
@@ -16,7 +22,7 @@ export const signUp = async (loginId: string, plainPassword: string, nickname: s
   });
   const loginJwt = jwtSign({userId: user._id});
 
-  return loginJwt;
+  return {loginJwt, user};
 };
 
 /**
@@ -24,7 +30,7 @@ export const signUp = async (loginId: string, plainPassword: string, nickname: s
  * @param loginId 로그인에 사용할 id
  * @param plainPassword 로그인에 사용한 plain password
  * @returns false 로그인에 실패했을 경우
- * @returns loginJwt string, 사용자 인증에 사용할 jwt
+ * @returns {SignResult} 로그인 성공시
  */
 export const signIn = async (loginId: string, plainPassword: string) => {
   const user = await UserModel.findOne({loginId});
@@ -37,7 +43,7 @@ export const signIn = async (loginId: string, plainPassword: string) => {
 
   const loginJwt = jwtSign({userId: user._id});
 
-  return loginJwt;
+  return {loginJwt, user};
 };
 
 /**

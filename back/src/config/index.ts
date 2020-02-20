@@ -12,7 +12,7 @@ type keys = 'dbURL' | 'frontURL' | 'backURL';
 
 
 let config: ConfigStore = {
-  dbURL: 'mongodb://localhost/kpmg',
+  dbURL: '',
   frontURL: 'http://localhost:3000',
   backURL: 'http://localhost:4000'
 };

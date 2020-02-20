@@ -1,9 +1,73 @@
 import {wrapper} from '../utils/wrapper';
-import validate = require('validate.js');
+import validate from 'validate.js';
 import * as meetingServices from '../services/meeting';
+import {ObjectId} from 'bson';
 
 export const postMeeting = wrapper(async (req, res) => {
-  const meeting = await meetingServices.postMeeting(req.body.agendas);
+  const input = {
+    name: req.body.name,
+    agendas: req.body.agendas
+  };
 
+  const invalid = validate(input, {
+    name: {
+      presence: true,
+      type: 'string'
+    },
+    agendas: {
+      presence: true,
+      type: 'array'
+    }
+  });
+
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+  const startDate = new Date();
+  for (let i = 0 ; i < (input.agendas as any[]).length ; i ++) {
+    const keys = Object.keys(input.agendas[i]);
+    for (let j = 0 ; j < keys.length ; j ++) {
+      const key = keys[j];
+      if (!(['name', 'expectedTime'].includes(key))) {
+        return res.status(400).json({msg: 'Wrong agendas'});
+      }
+    }
+    if (!validate.isString(input.agendas[i]['name']) || !validate.isNumber(input.agendas[i]['expectedTime'])) {
+      return res.status(400).json({msg: 'Wrong agendas'});
+    }
+    input.agendas[i] = {
+      ...input.agendas[i],
+      startDate,
+      records: [],
+      usedTime: 0,
+      endDate: null      
+    };
+  }
+
+  const meeting = await meetingServices.postMeeting(input.name, input.agendas);
+  await meetingServices.enterMeeting(req.user!._id, meeting._id); // 성공이 보장됨.
   return res.status(200).json({meeting: meeting._id});
+});
+
+export const enterMeeting = wrapper(async (req, res) => {
+  const input = {
+    meetingId: req.params.meetingId
+  };
+  const invalid = validate(input, {
+    meetingId: {
+      objectid: true
+    }
+  });
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+
+  const ret = await meetingServices.enterMeeting(req.user!._id, new ObjectId(input.meetingId));
+  if ( ret === -1 ) {
+    return res.status(404).json({msg: 'Meeting not found'});
+  }
+  if ( ret === -2 ) {
+    return res.status(409).json({msg: 'Already entered in meeting'});
+  }
+  return res.status(200).json({success: true});
 });

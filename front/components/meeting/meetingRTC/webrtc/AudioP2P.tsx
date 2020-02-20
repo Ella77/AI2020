@@ -1,14 +1,12 @@
 import React, { Component, createRef } from "react";
 import { withAlert } from "react-alert";
-import io from "socket.io-client";
 import {
   getUserMediaContraints,
   RTCPeerConnectionConfig,
   offerAndAnswerOptions
 } from "../../../../config/webrtc";
-import { webrtc_config } from "../../../../config/api";
 
-type Props = { alert: any };
+type Props = { alert: any; socket: any };
 type States = { isCallDisable: boolean; connectionSuccess: boolean };
 class Audio extends Component<Props, States> {
   //types
@@ -29,13 +27,11 @@ class Audio extends Component<Props, States> {
 
   // handling peerconnection
   handlePeerConnection() {
-    this.socket = io(webrtc_config.server);
-
-    this.socket.on("connection-success", success => {
+    this.props.socket.on("connection-success", success => {
       console.log(success);
     });
 
-    this.socket.on("offer", sdp => {
+    this.props.socket.on("offer", sdp => {
       this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
       this.props.alert.show("answer the call");
       console.log("answer");
@@ -46,11 +42,11 @@ class Audio extends Component<Props, States> {
         this.sendToPeer("answer", sdp);
       });
     });
-    this.socket.on("answer", sdp => {
+    this.props.socket.on("answer", sdp => {
       this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
     });
 
-    this.socket.on("candidate", candidate => {
+    this.props.socket.on("candidate", candidate => {
       console.log("add ice");
       this.pc.addIceCandidate(new RTCIceCandidate(candidate));
     });
@@ -103,8 +99,8 @@ class Audio extends Component<Props, States> {
   };
 
   sendToPeer = (messageType, payload) => {
-    this.socket.emit(messageType, {
-      socketID: this.socket.id,
+    this.props.socket.emit(messageType, {
+      socketID: this.props.socket.id,
       payload
     });
   };

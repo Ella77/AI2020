@@ -215,17 +215,17 @@ var alertOptions = {
 /*!***********************!*\
   !*** ./config/api.ts ***!
   \***********************/
-/*! exports provided: webrtc_config, backend_server, stt_endpoint, stt_region */
+/*! exports provided: socket_config, backend_server, stt_endpoint, stt_region */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "webrtc_config", function() { return webrtc_config; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "socket_config", function() { return socket_config; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "backend_server", function() { return backend_server; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stt_endpoint", function() { return stt_endpoint; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stt_region", function() { return stt_region; });
-var webrtc_config = {
-  server: "http://localhost:4000/room"
+var socket_config = {
+  server: "http://localhost:4000"
 };
 var backend_server = {
   base_url: "http://localhost:4000"
@@ -21236,7 +21236,7 @@ module.exports = assign;
 /*!***********************************************************************!*\
   !*** ./node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js ***!
   \***********************************************************************/
-/*! exports provided: default, CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel */
+/*! exports provided: CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

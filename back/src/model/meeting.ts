@@ -10,8 +10,8 @@ export type Record = {
 export type Agenda = {
   name: string;
   
-  expectedTime: number; // ms
-  usedTime: number; // ms
+  expectedTime: number; // minute
+  usedTime: number; // minute
 
   startDate: Date;
   endDate: Date | null;

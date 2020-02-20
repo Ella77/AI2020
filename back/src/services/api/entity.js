@@ -37,18 +37,15 @@ async function getDescription(keyword) {
     // await sleep(2000);
 
     let result;
+    var json = [];
     try {
-        result = entitySearchApiClient.entitiesOperations.search(keyword);
+        result = await entitySearchApiClient.entitiesOperations.search(keyword);
         //result = entitiesOperations.search('seahawks')
     } catch (err) {
         if (err instanceof entityModels.ErrorResponse) {
             console.log("Encountered exception. " + err.message);
         }
     }
-    if (result.entities.value.image) {
-        console.log(result.entities.value.image.thumbnailUrl);
-    }
-
     if (((result.entities || {}).value || {}).length > 0) {
 
         // find the entity that represents the dominant one
@@ -56,15 +53,30 @@ async function getDescription(keyword) {
             (thing) => thing.entityPresentationInfo.entityScenario == "DominantEntity"
         );
         if (mainEntity) {
-            console.log("Searched for", keyword, "and found a dominant entity with this description:");
-            console.log(mainEntity.description);
-            return mainEntity.description;
+            if (result.entities.value.image) {
+
+                //console.log("Searched for", keyword, "and found a dominant entity with this description:");
+                json.push({
+                    thumbnailUrl: result.entities.value.image.thumbnailUrl,
+                    description: mainEntity.description
+                });
+                console.log(json);
+                return json;
+            } else {
+               // console.log(mainEntity.description);
+                json.push({thumbnailUrl: NaN, description: mainEntity.description});
+                console.log(json);
+                return json;
+            }
+
         } else {
             console.log("Couldn't find main entity");
         }
     } else {
         console.log("Didn't see any data..");
     }
+
+
 }
 
 // async function () {
@@ -127,7 +139,7 @@ async function getLocation(keyword) {
     //  await sleep(2000);
 
     console.log(os.EOL);
-    console.log("4. This will look up a list of restaurants (seattle restaurants) and present their names and phone numbers.");
+    //console.log("4. This will look up a list of restaurants (seattle restaurants) and present their names and phone numbers.");
     let httpResponse;
     try {
         httpResponse = await entitySearchApiClient.entitiesOperations.searchWithHttpOperationResponse(keyword);
@@ -148,8 +160,8 @@ async function getLocation(keyword) {
                 let place = listItems[i];
                 stringBuilder += util.format(", %s (%s)", place.name, place.telephone);
             }
-            console.log("Ok, we found these places: ");
-            console.log(stringBuilder.slice(1));
+            //console.log("Ok, we found these places: ");
+            //console.log(stringBuilder.slice(1));
             return stringBuilder
         } else {
             console.log("Couldn't find any relevant results for \"seattle restaurants\"");
@@ -212,7 +224,7 @@ async function getLocation(keyword) {
 //   throw err;
 // });
 
-// sample('Einstein');
+//getDescription('Armstrong');
 //exports.search = search;
 exports.getLocation = getLocation;
 exports.getDescription = getDescription;

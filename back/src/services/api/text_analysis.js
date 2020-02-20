@@ -89,7 +89,7 @@ async function getKeyphrase(jsoninput){
 
 // <entityRecognition>
 async function getEntity(jsoninput){
-    console.log("3. This will perform Entity recognition on the sentences.");
+    //console.log("3. This will perform Entity recognition on the sentences.");
 
     // const entityInputs = {
     //     documents: [
@@ -114,7 +114,7 @@ async function getEntity(jsoninput){
         // console.log(`Document ID: ${document.id}`);
 
         document.entities.forEach(e => {
-            console.log(`${document.id},${e.name}, ${e.type}`);
+            //console.log(`${document.id},${e.name}, ${e.type}`);
             // e.matches.forEach(match =>
             //     console.log(
             //         `\t\tOffset: ${match.offset} Length: ${match.length} Score: ${

@@ -32,7 +32,7 @@ let imageSearchApiClient = new Search.ImageSearchAPIClient(credentials);
 // function image() {
 //     async.series([
 async function getImage(keyword) {
-    console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
+   // console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
 
     let imageResults = await imageSearchApiClient.imagesOperations.search(keyword);
 
@@ -44,14 +44,12 @@ async function getImage(keyword) {
             let firstImageResult = imageResults.value[0];
             // console.log(`Image result count: ${imageResults.value.length}`);
             // console.log(`First image insights token: ${firstImageResult.imageInsightsToken}`);
-            console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-            console.log(`First image content url: ${firstImageResult.contentUrl}`);
-
+            //console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+            //console.log(`First image content url: ${firstImageResult.contentUrl}`);
             let secondImageResult = imageResults.value[1];
-            console.log(`Second image thumbnail url: ${secondImageResult.thumbnailUrl}`);
-            console.log(`Second image content url: ${secondImageResult.contentUrl}`);
-
-            return [firstImageResult, secondImageResult]
+            //console.log(`Second image thumbnail url: ${secondImageResult.thumbnailUrl}`);
+            //console.log(`Second image content url: ${secondImageResult.contentUrl}`);
+            return [firstImageResult.contentUrl, secondImageResult.contentUrl]
         } else {
             console.log("Couldn't find image results!");
         }

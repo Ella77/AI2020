@@ -7,14 +7,23 @@ interface ConfigStore {
   dbURL: string;
   frontURL: string;
   backURL: string;
+  textKey: string;
+  bingKey: string;
+  textEndpoint: string;
+  bingEndpoint: string;
+
 }
-type keys = 'dbURL' | 'frontURL' | 'backURL';
+type keys = 'dbURL' | 'frontURL' | 'backURL' | 'textKey' | 'bingKey' | 'textEndpoint' | 'bingEndpoint';
 
 
 let config: ConfigStore = {
   dbURL: '',
-  frontURL: 'http://localhost:3000',
-  backURL: 'http://localhost:4000'
+  frontURL: '',
+  backURL: '',
+  textKey: '',
+  bingKey: '',
+  textEndpoint : '',
+  bingEndpoint : ''
 };
 
 const STORE_PATH = path.join(__dirname, 'store');

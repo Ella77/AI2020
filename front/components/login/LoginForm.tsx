@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_REQUEST } from "../../reducers/user/actions";
 import { store } from "../../reducers/indext.type";
 import { useRouter } from "next/router";
+import { Form, Icon, Input, Button } from "antd";
 
 const LoginForm = () => {
   const [loginId, setLoginId] = useState("");
@@ -31,19 +32,31 @@ const LoginForm = () => {
 
   return (
     <div>
-      <form onSubmit={_onSubmitForm}>
-        <label>아이디</label>
-        <input value={loginId} onChange={e => setLoginId(e.target.value)} />
-        <label>비밀번호</label>
-        <input
-          value={plainPassword}
-          onChange={e => setPlainPassword(e.target.value)}
-        />
-        <button type="submit">로그인</button>
-        <Link href="/singUp">
+      <Form onSubmit={_onSubmitForm}>
+        <Form.Item>
+          <Input
+            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+            placeholder="Username"
+            value={loginId}
+            onChange={e => setLoginId(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Input
+            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            type="password"
+            placeholder="Password"
+            value={plainPassword}
+            onChange={e => setPlainPassword(e.target.value)}
+          />
+        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          로그인
+        </Button>
+        <Link href="/signUp">
           <a>회원가입</a>
         </Link>
-      </form>
+      </Form>
     </div>
   );
 };

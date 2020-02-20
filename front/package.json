@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
+    "antd": "^3.26.11",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "immer": "^5.3.6",

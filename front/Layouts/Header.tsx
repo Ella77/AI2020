@@ -1,11 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { store } from "../reducers/indext.type";
+import { LOGOUT } from "../reducers/user/actions";
 
 const Header = () => {
   const { me } = useSelector((state: store) => state.user);
-
+  const dispatch = useDispatch();
+  const _onClickLogout = () => {
+    dispatch({
+      type: LOGOUT
+    });
+  };
   return (
     <>
       <li>
@@ -21,8 +27,10 @@ const Header = () => {
                 <a>회의생성</a>
               </Link>
             </ul>
-            <ul>
-              <button>로그아웃</button>
+            <ul onClick={_onClickLogout}>
+              <Link href="/">
+                <a>로그아웃</a>
+              </Link>
             </ul>
           </>
         ) : (

@@ -319,8 +319,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stt_endpoint", function() { return stt_endpoint; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stt_region", function() { return stt_region; });
 const webrtc_config = {
-  server: "https://84b71edf.ngrok.io//room",
-  path: "/room"
+  server: "http://localhost:4000/room"
 };
 const backend_server = {
   base_url: "http://localhost:4000"

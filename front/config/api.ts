@@ -1,6 +1,5 @@
 export const webrtc_config = {
-  server: "https://84b71edf.ngrok.io//room",
-  path: "/room"
+  server: "http://localhost:4000/room"
 };
 
 export const backend_server = {

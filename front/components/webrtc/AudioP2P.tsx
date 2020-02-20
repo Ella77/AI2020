@@ -29,9 +29,7 @@ class Audio extends Component<Props, States> {
 
   // handling peerconnection
   handlePeerConnection() {
-    this.socket = io(webrtc_config.server, {
-      path: webrtc_config.path
-    });
+    this.socket = io(webrtc_config.server);
 
     this.socket.on("connection-success", success => {
       console.log(success);

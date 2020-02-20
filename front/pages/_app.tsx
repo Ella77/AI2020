@@ -1,17 +1,18 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { NextPage, NextPageContext } from "next";
+import { Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 import Head from "next/head";
 import withRedux from "next-redux-wrapper";
 import withReduxSaga from "next-redux-saga";
-import { applyMiddleware, compose, createStore, Store } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
 import createSagaMiddleware from "redux-saga";
 import axios from "axios";
-
 import reducer from "../reducers";
 import rootSaga from "../sagas";
 import { store } from "../reducers/indext.type";
+import { alertOptions } from "../config/alert";
 import "./styles.scss";
 
 const App = ({ Component, store, pageProps }) => {
@@ -20,7 +21,9 @@ const App = ({ Component, store, pageProps }) => {
       <Head>
         <title>kpmg</title>
       </Head>
-      <Component {...pageProps} />
+      <AlertProvider template={AlertTemplate} {...alertOptions}>
+        <Component {...pageProps} />
+      </AlertProvider>
     </Provider>
   );
 };

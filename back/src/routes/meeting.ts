@@ -6,5 +6,7 @@ const Router = Express.Router();
 
 Router.post('/', verifyLogin, meetingController.postMeeting);
 Router.post('/:meetingId/enter', verifyLogin, meetingController.enterMeeting);
+Router.get('/', meetingController.getEntireMeetings);
+Router.get('/:meetingId', meetingController.getMeetingById);
 
 export default Router;

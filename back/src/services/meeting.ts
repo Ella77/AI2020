@@ -1,4 +1,4 @@
-import {MeetingModel, Agenda} from '../model/meeting';
+import {MeetingModel, Meeting, Agenda} from '../model/meeting';
 import { UserModel, User } from '../model/user';
 import { ObjectId } from 'bson';
 
@@ -42,4 +42,58 @@ export const enterMeeting = async (userId: ObjectId, meetingId: ObjectId) => {
   await meeting.save();
   await user.save();
   return 0;
+};
+
+/**
+ * 
+ * @param page 페이지 번호 1부터 시작, 기본 1개
+ * @param perpage 페이지당 보여줄 개수, 기본 12개
+ */
+export const getMeetings = async (page = 1, perpage = 12) => {
+  const query = MeetingModel.find();
+  const lastPage = Math.ceil(((await query).length / perpage));
+  const meetings = await query.skip((page -1) * perpage).limit(page * perpage)
+    .populate({
+      path: 'participants',
+      select: '-encryptedPassword -meetings',
+    });
+  return {result: meetings, lastPage}; // (page-1) * perpage가 범위를 초과할 경우 빈 배열 반환함 
+};
+
+/**
+ * 
+ * @param userId meetings를 가져올 userId
+ * @returns 
+ */
+export const getMeetingsByUser = async (userId: ObjectId) => {
+  const user = await UserModel.findById(userId)
+    .populate({
+      path: 'meetings',
+      populate: {
+        path: 'participants',
+        select: '-encryptedPassword -meetings'
+      }
+    });
+  if (!user) {
+    return -1;
+  }
+  return user.meetings as Meeting[];
+};
+
+/**
+ * 
+ * @param meetingId 가져올 meeting _id
+ * @return meeting 성공시
+ * @return -1 meetingId에 해당하는 meeting이 없을시
+ */
+export const getMeetingById = async (meetingId: ObjectId) => {
+  const meeting = await MeetingModel.findById(meetingId)
+    .populate({
+      path: 'participants',
+      select: '-encryptedPassword -meetings',
+    });
+  if (!meeting) {
+    return -1;
+  }
+  return meeting;
 };

@@ -22,7 +22,7 @@ export const signUp = async (loginId: string, plainPassword: string, nickname: s
   });
   const loginJwt = jwtSign({userId: user._id});
 
-  return {loginJwt, user};
+  return {loginJwt, user: {_id: user._id, nickname: user.nickname, loginId: user.loginId}};
 };
 
 /**
@@ -42,8 +42,7 @@ export const signIn = async (loginId: string, plainPassword: string) => {
   }
 
   const loginJwt = jwtSign({userId: user._id});
-
-  return {loginJwt, user};
+  return {loginJwt, user: {_id: user._id, nickname: user.nickname, loginId: user.loginId}};
 };
 
 /**

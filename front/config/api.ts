@@ -1,5 +1,5 @@
-export const webrtc_config = {
-  server: "http://localhost:4000/room"
+export const socket_config = {
+  server: "http://localhost:4000"
 };
 
 export const backend_server = {

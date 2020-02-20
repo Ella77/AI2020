@@ -7,6 +7,18 @@ export type Record = {
   sentence: string;
 }
 
+export type Keyword = {
+  word: string;
+  comeup: number;
+}
+
+export type Search = {
+  name: string;
+  type: string;
+  comeup: number;
+
+}
+
 export type Agenda = {
   name: string;
   
@@ -17,6 +29,8 @@ export type Agenda = {
   endDate: Date | null;
   
   records: Record[];
+  keywords: Keyword[];
+  searches : Search[];
 };
 
 export interface Meeting extends mongoose.Document {

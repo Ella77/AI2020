@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "../reducers/indext.type";
-import { LOGOUT } from "../reducers/user/actions";
+import { LOGOUT, LOAD_USER_REQUEST } from "../reducers/user/actions";
 
 const Header = () => {
   const { me } = useSelector((state: store) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_USER_REQUEST
+    });
+  }, []);
+
   const _onClickLogout = () => {
     dispatch({
       type: LOGOUT
@@ -37,12 +44,12 @@ const Header = () => {
           <>
             <ul>
               <Link href="/login">
-                <a>login</a>
+                <a>로그인</a>
               </Link>
             </ul>
             <ul>
               <Link href="/signUp">
-                <a>signup</a>
+                <a>회원가입</a>
               </Link>
             </ul>
           </>

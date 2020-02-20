@@ -39,6 +39,7 @@ export default (state = initialState, action: userActions) => {
       case SIGN_UP_SUCCESS: {
         draft.loadingStates.isSigning = false;
         draft.me = action.result.user;
+        localStorage.setItem("user", JSON.stringify(action.result.user));
         break;
       }
       case SIGN_UP_FAILURE: {
@@ -54,6 +55,7 @@ export default (state = initialState, action: userActions) => {
       case LOGIN_SUCCESS: {
         draft.loadingStates.isLoging = false;
         draft.me = action.result.user;
+        localStorage.setItem("user", JSON.stringify(action.result.user));
         break;
       }
       case LOGIN_FAILURE: {
@@ -78,6 +80,7 @@ export default (state = initialState, action: userActions) => {
 
       case LOGOUT: {
         draft.me = null;
+        localStorage.removeItem("user");
         break;
       }
 

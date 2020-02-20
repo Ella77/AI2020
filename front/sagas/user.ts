@@ -8,7 +8,10 @@ import {
   LOGIN_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
-  SIGN_UP_FAILURE
+  SIGN_UP_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_FAILURE,
+  LOAD_USER_SUCCESS
 } from "../reducers/user/actions";
 
 function signUpAPI(data) {
@@ -66,6 +69,35 @@ function* watchLogin() {
   yield takeLatest(LOGIN_REQUEST, login);
 }
 
+function* loadUser() {
+  try {
+    let user = yield localStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      yield put({
+        type: LOAD_USER_SUCCESS,
+        result: {
+          user
+        }
+      });
+    } else {
+      yield put({
+        type: LOAD_USER_FAILURE
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_USER_FAILURE,
+      data: error
+    });
+  }
+}
+
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogin), fork(watchSignUp)]);
+  yield all([fork(watchLogin), fork(watchSignUp), fork(watchLoadUser)]);
 }

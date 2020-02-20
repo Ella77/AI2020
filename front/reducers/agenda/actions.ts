@@ -1,3 +1,0 @@
-export const MAKE_AGENDA = "MAKE_AGENDA";
-export const DELETE_AGENDA = "DELETE_AGENDA";
-export const MAKE_CONFERENCE = "MAKE_CONFERENCE";

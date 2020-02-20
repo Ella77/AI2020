@@ -160,6 +160,11 @@ const Header = () => {
     me
   } = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(state => state.user);
   const dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useDispatch"])();
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    dispatch({
+      type: _reducers_user_actions__WEBPACK_IMPORTED_MODULE_3__["LOAD_USER_REQUEST"]
+    });
+  }, []);
 
   const _onClickLogout = () => {
     dispatch({
@@ -170,36 +175,17 @@ const Header = () => {
   return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("li", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17
+      lineNumber: 24
     },
     __self: undefined
   }, __jsx("ul", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 18
-    },
-    __self: undefined
-  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-    href: "/",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 19
-    },
-    __self: undefined
-  }, __jsx("a", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 20
-    },
-    __self: undefined
-  }, "Home"))), me ? __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("ul", {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 25
     },
     __self: undefined
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-    href: "/meeting",
+    href: "/",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 26
@@ -211,65 +197,84 @@ const Header = () => {
       lineNumber: 27
     },
     __self: undefined
+  }, "Home"))), me ? __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("ul", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 32
+    },
+    __self: undefined
+  }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    href: "/meeting",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 33
+    },
+    __self: undefined
+  }, __jsx("a", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 34
+    },
+    __self: undefined
   }, "\uD68C\uC758\uC0DD\uC131"))), __jsx("ul", {
     onClick: _onClickLogout,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 30
+      lineNumber: 37
     },
     __self: undefined
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
     href: "/",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31
+      lineNumber: 38
     },
     __self: undefined
   }, __jsx("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32
+      lineNumber: 39
     },
     __self: undefined
   }, "\uB85C\uADF8\uC544\uC6C3")))) : __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("ul", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38
+      lineNumber: 45
     },
     __self: undefined
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
     href: "/login",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39
+      lineNumber: 46
     },
     __self: undefined
   }, __jsx("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40
+      lineNumber: 47
     },
     __self: undefined
-  }, "login"))), __jsx("ul", {
+  }, "\uB85C\uADF8\uC778"))), __jsx("ul", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 43
+      lineNumber: 50
     },
     __self: undefined
   }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
     href: "/signUp",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44
+      lineNumber: 51
     },
     __self: undefined
   }, __jsx("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 52
     },
     __self: undefined
-  }, "signup"))))));
+  }, "\uD68C\uC6D0\uAC00\uC785"))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -2333,11 +2338,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_alert__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../config/alert */ "./config/alert.ts");
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles.scss */ "./pages/styles.scss");
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Layouts/AppLayout */ "./Layouts/AppLayout.tsx");
+/* harmony import */ var _agenda_scss__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./agenda.scss */ "./pages/agenda.scss");
+/* harmony import */ var _agenda_scss__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_agenda_scss__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Layouts/AppLayout */ "./Layouts/AppLayout.tsx");
 var _jsxFileName = "/Users/gadamer1/Documents/webdev/kpmg/front/pages/_app.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -2365,26 +2373,26 @@ const App = ({
     store: store,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 21
+      lineNumber: 22
     },
     __self: undefined
   }, __jsx(next_head__WEBPACK_IMPORTED_MODULE_4___default.a, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 23
     },
     __self: undefined
   }, __jsx("title", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23
+      lineNumber: 24
     },
     __self: undefined
   }, "kpmg"), __jsx("script", {
     src: "microsoft.cognitiveservices.speech.sdk.bundle.js",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 25
     },
     __self: undefined
   }), __jsx("link", {
@@ -2392,14 +2400,14 @@ const App = ({
     href: "https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.css",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25
+      lineNumber: 26
     },
     __self: undefined
   }), __jsx("script", {
     src: "https://cdnjs.cloudflare.com/ajax/libs/antd/3.18.1/antd.js",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29
+      lineNumber: 30
     },
     __self: undefined
   })), __jsx(react_alert__WEBPACK_IMPORTED_MODULE_2__["Provider"], _extends({
@@ -2407,19 +2415,19 @@ const App = ({
   }, _config_alert__WEBPACK_IMPORTED_MODULE_13__["alertOptions"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31
+      lineNumber: 32
     },
     __self: undefined
-  }), __jsx(_Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_15__["default"], {
+  }), __jsx(_Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_16__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32
+      lineNumber: 33
     },
     __self: undefined
   }, __jsx(Component, _extends({}, pageProps, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33
+      lineNumber: 34
     },
     __self: undefined
   })))));
@@ -2468,6 +2476,19 @@ const configureStore = initialState => {
 
 /***/ }),
 
+/***/ "./pages/agenda.scss":
+/*!***************************!*\
+  !*** ./pages/agenda.scss ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = {
+	"agenda": "_27n2J8EGLG9-Ea5HF09Pyd"
+};
+
+/***/ }),
+
 /***/ "./pages/styles.scss":
 /*!***************************!*\
   !*** ./pages/styles.scss ***!
@@ -2476,77 +2497,6 @@ const configureStore = initialState => {
 /***/ (function(module, exports) {
 
 
-
-/***/ }),
-
-/***/ "./reducers/agenda/actions.ts":
-/*!************************************!*\
-  !*** ./reducers/agenda/actions.ts ***!
-  \************************************/
-/*! exports provided: MAKE_AGENDA, DELETE_AGENDA, MAKE_CONFERENCE */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAKE_AGENDA", function() { return MAKE_AGENDA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_AGENDA", function() { return DELETE_AGENDA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAKE_CONFERENCE", function() { return MAKE_CONFERENCE; });
-const MAKE_AGENDA = "MAKE_AGENDA";
-const DELETE_AGENDA = "DELETE_AGENDA";
-const MAKE_CONFERENCE = "MAKE_CONFERENCE";
-
-/***/ }),
-
-/***/ "./reducers/agenda/index.ts":
-/*!**********************************!*\
-  !*** ./reducers/agenda/index.ts ***!
-  \**********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "immer");
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./actions */ "./reducers/agenda/actions.ts");
-
-
-const initialState = {
-  meetings: [],
-  currentMeeting: {
-    name: "",
-    agendas: []
-  },
-  currentAgendas: []
-};
-/* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
-  return immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
-    switch (action.type) {
-      case _actions__WEBPACK_IMPORTED_MODULE_1__["MAKE_CONFERENCE"]:
-        {
-          draft.meetings = action.payload;
-          break;
-        }
-
-      case _actions__WEBPACK_IMPORTED_MODULE_1__["MAKE_AGENDA"]:
-        {
-          draft.currentAgendas.push(action.payload);
-          break;
-        }
-
-      case _actions__WEBPACK_IMPORTED_MODULE_1__["DELETE_AGENDA"]:
-        {
-          draft.currentAgendas = draft.currentMeeting.agendas.filter(agenda => agenda.name !== action.payload.name);
-          break;
-        }
-
-      default:
-        {
-          break;
-        }
-    }
-  });
-});
 
 /***/ }),
 
@@ -2563,7 +2513,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(redux__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _agenda__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./agenda */ "./reducers/agenda/index.ts");
+/* harmony import */ var _meeting__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./meeting */ "./reducers/meeting/index.ts");
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./user */ "./reducers/user/index.ts");
 /* harmony import */ var _config_api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/api */ "./config/api.ts");
 
@@ -2573,10 +2523,100 @@ __webpack_require__.r(__webpack_exports__);
 
 axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.baseURL = _config_api__WEBPACK_IMPORTED_MODULE_4__["backend_server"].base_url;
 const rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  agenda: _agenda__WEBPACK_IMPORTED_MODULE_2__["default"],
+  meeting: _meeting__WEBPACK_IMPORTED_MODULE_2__["default"],
   user: _user__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (rootReducer);
+
+/***/ }),
+
+/***/ "./reducers/meeting/actions.ts":
+/*!*************************************!*\
+  !*** ./reducers/meeting/actions.ts ***!
+  \*************************************/
+/*! exports provided: MAKE_AGENDA, DELETE_AGENDA, CREATE_MEETING_REQUEST, CREATE_MEETING_SUCCESS, CREATE_MEETING_FAILURE */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAKE_AGENDA", function() { return MAKE_AGENDA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_AGENDA", function() { return DELETE_AGENDA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_MEETING_REQUEST", function() { return CREATE_MEETING_REQUEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_MEETING_SUCCESS", function() { return CREATE_MEETING_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_MEETING_FAILURE", function() { return CREATE_MEETING_FAILURE; });
+const MAKE_AGENDA = "MAKE_AGENDA";
+const DELETE_AGENDA = "DELETE_AGENDA";
+const CREATE_MEETING_REQUEST = "CREATE_MEETING_REQUEST";
+const CREATE_MEETING_SUCCESS = "CREATE_MEETING_SUCCESS";
+const CREATE_MEETING_FAILURE = "CREATE_MEETING_FAILURE";
+
+/***/ }),
+
+/***/ "./reducers/meeting/index.ts":
+/*!***********************************!*\
+  !*** ./reducers/meeting/index.ts ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "immer");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./actions */ "./reducers/meeting/actions.ts");
+
+
+const initialState = {
+  meeting: {
+    meetings: null,
+    currentMeeting: null,
+    currentAgendas: []
+  },
+  loadingStates: {
+    isCreatingMeeting: false
+  },
+  metaStates: {}
+};
+/* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
+  return immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
+    switch (action.type) {
+      case _actions__WEBPACK_IMPORTED_MODULE_1__["MAKE_AGENDA"]:
+        {
+          draft.meeting.currentAgendas.push(action.payload);
+          break;
+        }
+
+      case _actions__WEBPACK_IMPORTED_MODULE_1__["DELETE_AGENDA"]:
+        {
+          draft.meeting.currentAgendas = draft.meeting.currentAgendas.filter(agenda => agenda.id !== action.payload.id);
+          break;
+        }
+
+      case _actions__WEBPACK_IMPORTED_MODULE_1__["CREATE_MEETING_REQUEST"]:
+        {
+          draft.loadingStates.isCreatingMeeting = true;
+          break;
+        }
+
+      case _actions__WEBPACK_IMPORTED_MODULE_1__["CREATE_MEETING_SUCCESS"]:
+        {
+          draft.loadingStates.isCreatingMeeting = false;
+          break;
+        }
+
+      case _actions__WEBPACK_IMPORTED_MODULE_1__["CREATE_MEETING_FAILURE"]:
+        {
+          draft.loadingStates.isCreatingMeeting = false;
+          break;
+        }
+
+      default:
+        {
+          break;
+        }
+    }
+  });
+});
 
 /***/ }),
 
@@ -2653,6 +2693,7 @@ const initialState = {
         {
           draft.loadingStates.isSigning = false;
           draft.me = action.result.user;
+          localStorage.setItem("user", JSON.stringify(action.result.user));
           break;
         }
 
@@ -2672,6 +2713,7 @@ const initialState = {
         {
           draft.loadingStates.isLoging = false;
           draft.me = action.result.user;
+          localStorage.setItem("user", JSON.stringify(action.result.user));
           break;
         }
 
@@ -2703,6 +2745,7 @@ const initialState = {
       case _actions__WEBPACK_IMPORTED_MODULE_1__["LOGOUT"]:
         {
           draft.me = null;
+          localStorage.removeItem("user");
           break;
         }
 
@@ -2808,8 +2851,38 @@ function* watchLogin() {
   yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_user_actions__WEBPACK_IMPORTED_MODULE_4__["LOGIN_REQUEST"], login);
 }
 
+function* loadUser() {
+  try {
+    let user = yield localStorage.getItem("user");
+
+    if (user) {
+      user = JSON.parse(user);
+      yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
+        type: _reducers_user_actions__WEBPACK_IMPORTED_MODULE_4__["LOAD_USER_SUCCESS"],
+        result: {
+          user
+        }
+      });
+    } else {
+      yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
+        type: _reducers_user_actions__WEBPACK_IMPORTED_MODULE_4__["LOAD_USER_FAILURE"]
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
+      type: _reducers_user_actions__WEBPACK_IMPORTED_MODULE_4__["LOAD_USER_FAILURE"],
+      data: error
+    });
+  }
+}
+
+function* watchLoadUser() {
+  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_user_actions__WEBPACK_IMPORTED_MODULE_4__["LOAD_USER_REQUEST"], loadUser);
+}
+
 function* userSaga() {
-  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLogin), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchSignUp)]);
+  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLogin), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchSignUp), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadUser)]);
 }
 
 /***/ }),

@@ -14,6 +14,7 @@ import rootSaga from "../sagas";
 import { store } from "../reducers/indext.type";
 import { alertOptions } from "../config/alert";
 import "./styles.scss";
+import "./agenda.scss";
 import AppLayout from "../Layouts/AppLayout";
 
 const App = ({ Component, store, pageProps }) => {

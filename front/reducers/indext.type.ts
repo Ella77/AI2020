@@ -1,4 +1,4 @@
 import { userStore } from "./user/interfaces";
-import { agendaStore } from "./agenda/index";
+import { meetingStore } from "./meeting/interfaces";
 
-export type store = { agenda: agendaStore; user: userStore };
+export type store = { meeting: meetingStore; user: userStore };

@@ -339,7 +339,7 @@ const stt_region = "koreacentral";
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "development_mode", function() { return development_mode; });
-const development_mode = "development";
+const development_mode = "production";
 
 /***/ }),
 
@@ -2809,13 +2809,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function createMeetingAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/meetings", data, {
+  console.log(data);
+  let postData = {
+    name: data.name,
+    agendas: data.currentAgendas.map(agenda => ({
+      name: agenda.name,
+      expectedTime: agenda.expectedTime
+    }))
+  };
+  console.log(postData);
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/meetings", postData, {
     withCredentials: true
   });
 }
 
 function* createMeeting(action) {
   try {
+    console.log(action);
     const result = _config_env__WEBPACK_IMPORTED_MODULE_3__["development_mode"] !== "development" ? yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["call"])(createMeetingAPI, action.payload) : _utils_meetingDummyData__WEBPACK_IMPORTED_MODULE_2__["meetingCreateResponse"];
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
       type: _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_4__["CREATE_MEETING_SUCCESS"],
@@ -2864,7 +2874,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function signUpAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/auth/sign-up", data);
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/auth/sign-up", data, {
+    withCredentials: true
+  });
 }
 
 function* signUp(action) {
@@ -2888,7 +2900,9 @@ function* watchSignUp() {
 }
 
 function loginAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/auth/sign-in", data);
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/auth/sign-in", data, {
+    withCredentials: true
+  });
 }
 
 function* login(action) {

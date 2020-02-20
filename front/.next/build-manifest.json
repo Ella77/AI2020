@@ -19,6 +19,10 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
+    "/meeting": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
     "/meeting/[meetingID]": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"

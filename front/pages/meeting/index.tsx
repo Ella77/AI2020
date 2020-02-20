@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MeetingCreateForm from "../../components/meeting/MeetingCreateForm";
+import MeetingCreateForm from "../../components/meeting/createMeetings/MeetingCreateForm";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "../../reducers/indext.type";
 import { useRouter } from "next/dist/client/router";

@@ -5,8 +5,8 @@ import {
   getUserMediaContraints,
   RTCPeerConnectionConfig,
   offerAndAnswerOptions
-} from "../../config/webrtc";
-import { webrtc_config } from "../../config/api";
+} from "../../../../config/webrtc";
+import { webrtc_config } from "../../../../config/api";
 
 type Props = { alert: any };
 type States = { isCallDisable: boolean; connectionSuccess: boolean };

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MakeAgendaForm from "./MakeAgendaForm";
 import { useDispatch, useSelector } from "react-redux";
-import { store } from "../../reducers/indext.type";
+import { store } from "../../../reducers/indext.type";
 import Agenda from "./Agenda";
 import { Form, Input, Icon, Button } from "antd";
-import { CREATE_MEETING_REQUEST } from "../../reducers/meeting/actions";
+import { CREATE_MEETING_REQUEST } from "../../../reducers/meeting/actions";
 import { useRouter } from "next/router";
 
 const ConferenceMakeForm = () => {
@@ -26,7 +26,10 @@ const ConferenceMakeForm = () => {
     e.preventDefault();
     dispatch({
       type: CREATE_MEETING_REQUEST,
-      payload: {}
+      payload: {
+        name,
+        currentAgendas
+      }
     });
   };
 

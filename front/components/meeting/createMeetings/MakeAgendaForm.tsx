@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { MAKE_AGENDA } from "../../reducers/meeting/actions";
-import { Form, Button, Input, Icon } from "antd";
+import { MAKE_AGENDA } from "../../../reducers/meeting/actions";
+import { Form, Button, Input, Icon, InputNumber } from "antd";
 
 const MakeAgenda = () => {
   const [name, setName] = useState("");
@@ -18,6 +18,8 @@ const MakeAgenda = () => {
         expectedTime
       }
     });
+    setName("");
+    setExpectedTime(0);
   };
 
   return (
@@ -30,10 +32,13 @@ const MakeAgenda = () => {
         />
       </Form.Item>
       <Form.Item label="에상 걸리는 시간(분)">
-        <Input
-          prefix={<Icon type="time" style={{ color: "rgba(0,0,0,.25)" }} />}
+        <InputNumber
           value={expectedTime}
-          onChange={e => setExpectedTime(Number(e.target.value))}
+          type=""
+          onChange={value => {
+            setExpectedTime(Math.floor(value));
+          }}
+          step={1}
         />
       </Form.Item>
 

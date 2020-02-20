@@ -245,7 +245,7 @@ var stt_region = "koreacentral";
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "development_mode", function() { return development_mode; });
-var development_mode = "development";
+var development_mode = "production";
 
 /***/ }),
 
@@ -21236,7 +21236,7 @@ module.exports = assign;
 /*!***********************************************************************!*\
   !*** ./node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js ***!
   \***********************************************************************/
-/*! exports provided: CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel, default */
+/*! exports provided: default, CANCEL, SAGA_LOCATION, buffers, detach, END, channel, eventChannel, isEnd, multicastChannel, runSaga, stdChannel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24230,7 +24230,18 @@ _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(m
 
 
 function createMeetingAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/meetings", data, {
+  console.log(data);
+  var postData = {
+    name: data.name,
+    agendas: data.currentAgendas.map(function (agenda) {
+      return {
+        name: agenda.name,
+        expectedTime: agenda.expectedTime
+      };
+    })
+  };
+  console.log(postData);
+  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/meetings", postData, {
     withCredentials: true
   });
 }
@@ -24242,51 +24253,52 @@ function createMeeting(action) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
+          console.log(action);
 
           if (!(_config_env__WEBPACK_IMPORTED_MODULE_4__["development_mode"] !== "development")) {
-            _context.next = 7;
+            _context.next = 8;
             break;
           }
 
-          _context.next = 4;
+          _context.next = 5;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["call"])(createMeetingAPI, action.payload);
 
-        case 4:
+        case 5:
           _context.t0 = _context.sent;
-          _context.next = 8;
+          _context.next = 9;
           break;
 
-        case 7:
+        case 8:
           _context.t0 = _utils_meetingDummyData__WEBPACK_IMPORTED_MODULE_3__["meetingCreateResponse"];
 
-        case 8:
+        case 9:
           result = _context.t0;
-          _context.next = 11;
+          _context.next = 12;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
             type: _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_MEETING_SUCCESS"],
             result: result.data.meeting
           });
 
-        case 11:
-          _context.next = 18;
+        case 12:
+          _context.next = 19;
           break;
 
-        case 13:
-          _context.prev = 13;
+        case 14:
+          _context.prev = 14;
           _context.t1 = _context["catch"](0);
           console.error(_context.t1);
-          _context.next = 18;
+          _context.next = 19;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
             type: _reducers_meeting_actions__WEBPACK_IMPORTED_MODULE_5__["CREATE_MEETING_FAILURE"],
             error: _context.t1
           });
 
-        case 18:
+        case 19:
         case "end":
           return _context.stop();
       }
     }
-  }, _marked, null, [[0, 13]]);
+  }, _marked, null, [[0, 14]]);
 }
 
 function watchCreateMeeting() {
@@ -24372,7 +24384,9 @@ _babel_runtime_corejs2_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(u
 
 
 function signUpAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/auth/sign-up", data);
+  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/auth/sign-up", data, {
+    withCredentials: true
+  });
 }
 
 function signUp(action) {
@@ -24446,7 +24460,9 @@ function watchSignUp() {
 }
 
 function loginAPI(data) {
-  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/auth/sign-in", data);
+  return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/auth/sign-in", data, {
+    withCredentials: true
+  });
 }
 
 function login(action) {

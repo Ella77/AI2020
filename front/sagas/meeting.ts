@@ -9,13 +9,24 @@ import {
 } from "../reducers/meeting/actions";
 
 function createMeetingAPI(data) {
-  return axios.post("/meetings", data, {
+  console.log(data);
+  let postData = {
+    name: data.name,
+    agendas: data.currentAgendas.map(agenda => ({
+      name: agenda.name,
+      expectedTime: agenda.expectedTime
+    }))
+  };
+  console.log(postData);
+
+  return axios.post("/meetings", postData, {
     withCredentials: true
   });
 }
 
 function* createMeeting(action) {
   try {
+    console.log(action);
     const result =
       development_mode !== "development"
         ? yield call(createMeetingAPI, action.payload)

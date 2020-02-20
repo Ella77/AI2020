@@ -1,8 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { store } from "../../reducers/indext.type";
-import AudioP2P from "../../components/webrtc/AudioP2P";
-import STT from "../../components/stt/STT";
+import MeetingContainer from "../../components/meeting/meetingRTC/MeetingContainer";
 
 const MeetingID = () => {
   const { currentAgendas, currentMeeting } = useSelector(
@@ -11,8 +10,7 @@ const MeetingID = () => {
 
   return (
     <div>
-      <AudioP2P />
-      <STT />
+      <MeetingContainer />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { DELETE_AGENDA } from "../../reducers/meeting/actions";
+import { DELETE_AGENDA } from "../../../reducers/meeting/actions";
 
 const Agenda = ({ agenda }) => {
   const dispatch = useDispatch();

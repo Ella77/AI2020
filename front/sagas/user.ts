@@ -15,7 +15,7 @@ import {
 } from "../reducers/user/actions";
 
 function signUpAPI(data) {
-  return axios.post("/auth/sign-up", data);
+  return axios.post("/auth/sign-up", data, { withCredentials: true });
 }
 
 function* signUp(action) {
@@ -43,7 +43,7 @@ function* watchSignUp() {
 }
 
 function loginAPI(data) {
-  return axios.post("/auth/sign-in", data);
+  return axios.post("/auth/sign-in", data, { withCredentials: true });
 }
 
 function* login(action) {

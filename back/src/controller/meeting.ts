@@ -2,6 +2,7 @@ import {wrapper} from '../utils/wrapper';
 import validate from 'validate.js';
 import * as meetingServices from '../services/meeting';
 import {ObjectId} from 'bson';
+import { Meeting } from '../model/meeting';
 
 export const postMeeting = wrapper(async (req, res) => {
   const input = {
@@ -70,4 +71,52 @@ export const enterMeeting = wrapper(async (req, res) => {
     return res.status(409).json({msg: 'Already entered in meeting'});
   }
   return res.status(200).json({success: true});
+});
+
+export const getEntireMeetings = wrapper(async (req, res) => {
+  const input: any = {
+    page: parseInt(req.query.page),
+    perpage: parseInt(req.query.perpage)
+  };
+  Object.keys(input).forEach(key => !input[key] && delete input[key]);
+
+  const invalid = validate(input, {
+    page: {
+      type: 'integer'
+    },
+    perpage: {
+      type: 'integer'
+    }
+  });
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+  const result = await meetingServices.getMeetings(input.page, input.perpage);
+  res.status(200).json(result);
+});
+
+export const getMyMeetings = wrapper(async (req, res) => {
+  const result = await meetingServices.getMeetingsByUser(req.user._id) as Meeting[];
+  res.status(200).json({result});
+});
+
+export const getMeetingById = wrapper(async (req, res) => {
+  const input = {
+    meetingId: req.params.meetingId
+  };
+
+  const invalid = validate(input, {
+    meetingId: {
+      objectid: true
+    }
+  });
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+
+  const meeting = await meetingServices.getMeetingById(new ObjectId(input.meetingId));
+  if (meeting === -1) {
+    return res.status(404).json({msg: 'Meeting not found'});
+  }
+  res.status(200).json({result: meeting});
 });

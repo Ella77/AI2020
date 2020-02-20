@@ -130,7 +130,7 @@ dmypy.json
 
 #front
 front/node_modules
-front/.next/*
+front/.next
 front/package-lock.json
 front/key.js
 # Backend

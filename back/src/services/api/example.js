@@ -1,6 +1,6 @@
 var entity = require('./entity.js');
 entity.getLocation('newyork restaurants');
-entity.getDescription('Einstein');
+//entity.getDescription('Einstein');
 
 var image = require('./image.js');
 image.getImage('Obama');

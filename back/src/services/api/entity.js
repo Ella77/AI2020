@@ -12,8 +12,8 @@ const Search = require('azure-cognitiveservices-search');
 const CognitiveServicesCredentials = require('ms-rest-azure').CognitiveServicesCredentials;
 
 //let subscriptionKey = process.env['BING_ENTITY_SEARCH_SUBSCRIPTION_KEY']
-let subscriptionKey = 'adca14b151b74a1a9d1c53b35f269000'
-// Add your Bing Entity Search subscription key to your environment variables.
+var config = require("../../config/index.ts");
+let subscriptionKey =  config.getValue('bingKey');
 if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
     throw new Error('Set/export your subscription key as an environment variable.');
 }
@@ -155,14 +155,18 @@ async function getLocation(keyword) {
             (thing) => thing.entityPresentationInfo.entityScenario == "ListItem"
         )
         if (listItems.length > 0) {
-            let stringBuilder = "";
+            // let stringBuilder = "";
+            var json = [];
+
             for (let i = 0; i < listItems.length; i++) {
                 let place = listItems[i];
-                stringBuilder += util.format(", %s (%s)", place.name, place.telephone);
+                json.push({name:place.name,telephone:place.telephone});
+                // stringBuilder += util.format(", %s (%s)", place.name, place.telephone);
             }
             //console.log("Ok, we found these places: ");
             //console.log(stringBuilder.slice(1));
-            return stringBuilder
+            console.log(json);
+            return json;
         } else {
             console.log("Couldn't find any relevant results for \"seattle restaurants\"");
         }
@@ -223,7 +227,7 @@ async function getLocation(keyword) {
 // }).catch((err) => {
 //   throw err;
 // });
-
+//getLocation('newyork restaurant');
 //getDescription('Armstrong');
 //exports.search = search;
 exports.getLocation = getLocation;

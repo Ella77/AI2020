@@ -6,14 +6,17 @@ import {hash, jwtSign} from '../utils/auth';
  * @param loginId 로그인에 사용할 id
  * @param plainPassword 비밀번호
  * @param nickname 닉네임
+ * @returns loginJwt string, 사용자 인증에 사용할 jwt
  */
 export const signUp = async (loginId: string, plainPassword: string, nickname: string) => {
-  await UserModel.create({
+  const user = await UserModel.create({
     loginId,
     encryptedPassword: hash(plainPassword),
     nickname
   });
-  return true;
+  const loginJwt = jwtSign({userId: user._id});
+
+  return loginJwt;
 };
 
 /**
@@ -35,4 +38,18 @@ export const signIn = async (loginId: string, plainPassword: string) => {
   const loginJwt = jwtSign({userId: user._id});
 
   return loginJwt;
+};
+
+/**
+ * @description 아이디가 이미 존재하는지 확인
+ * @param loginId 확인할 loginId
+ * @returns true 존재할 경우
+ * @returns false 존재하지 않을 경우
+ */
+export const checkDuplicateLoginId = async (loginId: string) => {
+  const user = await UserModel.findOne({loginId});
+  if (user) {
+    return true;
+  }
+  return false;
 };

@@ -14,6 +14,7 @@ import rootSaga from "../sagas";
 import { store } from "../reducers/indext.type";
 import { alertOptions } from "../config/alert";
 import "./styles.scss";
+import AppLayout from "../Layouts/AppLayout";
 
 const App = ({ Component, store, pageProps }) => {
   return (
@@ -23,7 +24,9 @@ const App = ({ Component, store, pageProps }) => {
         <script src="microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
       </Head>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
-        <Component {...pageProps} />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       </AlertProvider>
     </Provider>
   );

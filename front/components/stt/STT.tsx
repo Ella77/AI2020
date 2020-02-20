@@ -3,66 +3,60 @@ import Head from "next/head";
 import { subscription_key } from "../../key";
 import { stt_region } from "../../config/api";
 import * as SpeechSDK from "microsoft-cognitiveservices-speech-sdk";
+import {
+  SpeechConfig,
+  AudioConfig
+} from "microsoft-cognitiveservices-speech-sdk";
 
 type props = {};
 type state = {
   text: string;
+  isEnd: boolean;
 };
 
 class STT extends Component<props, state> {
   textRef: React.RefObject<HTMLTextAreaElement>;
   text: any;
+  recognizer: any;
+  speechConfig: SpeechConfig;
+  audioConfig: AudioConfig;
   constructor(props) {
     super(props);
 
     this.state = {
-      text: ""
+      text: "",
+      isEnd: false
     };
     this.textRef = createRef();
     this.handle = this.handle.bind(this);
   }
-  authorizationEndpoint = "token.php";
 
   handle() {
-    // subscription key and region for speech services.
-    var subscriptionKey, serviceRegion;
-    // var SpeechSDK = require("microsoft-cognitiveservices-speech-sdk");
-    var recognizer;
-
-    subscriptionKey = subscription_key;
-    serviceRegion = stt_region;
-
-    // if we got an authorization token, use the token. Otherwise use the provided subscription key
-    var speechConfig;
-
-    speechConfig = SpeechSDK.SpeechConfig.fromSubscription(
-      subscriptionKey,
-      serviceRegion
+    this.speechConfig = SpeechSDK.SpeechConfig.fromSubscription(
+      subscription_key,
+      stt_region
     );
-
-    speechConfig.speechRecognitionLanguage = "en-US";
-    var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
-    recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
-    console.log(recognizer);
-
-    recognizer.recognizeOnceAsync(
+    this.audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+    this.speechConfig.speechRecognitionLanguage = "en-US";
+    this.recognizer = new SpeechSDK.SpeechRecognizer(
+      this.speechConfig,
+      this.audioConfig
+    );
+    this.recognizer.recognizeOnceAsync(
       result => {
         console.log(result);
         this.setState(prev => ({
           text: prev.text + result.text
         }));
-
-        recognizer.close();
-        recognizer = undefined;
+        this.recognizer.close();
+        this.handle();
       },
       err => {
         console.log(err);
         this.setState(prev => ({
           text: prev.text + err
         }));
-
-        recognizer.close();
-        recognizer = undefined;
+        this.recognizer.close();
       }
     );
   }
@@ -72,10 +66,6 @@ class STT extends Component<props, state> {
   render() {
     return (
       <div>
-        <Head>
-          <title>test</title>
-          <script src="../../utils/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
-        </Head>
         <button onClick={this.handle}>handle</button>
         <div id="warning">
           <h1>

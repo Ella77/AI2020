@@ -42,7 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(morganLogger("dev"));
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 
 app.use(Router);
 app.use(

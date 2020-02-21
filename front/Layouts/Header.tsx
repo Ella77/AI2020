@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "../reducers/indext.type";
 import { LOGOUT, LOAD_USER_REQUEST } from "../reducers/user/actions";
+import { Icon } from "antd";
+import styled from "styled-components";
 
 const Header = () => {
   const { me } = useSelector((state: store) => state.user);
@@ -20,23 +22,29 @@ const Header = () => {
     });
   };
   return (
-    <>
-      <li>
+    <Cover>
+      <li className="header">
         <ul>
           <Link href="/">
-            <a>Home</a>
+            <a>
+              <Icon style={{ fontSize: 30 }} type="home" />
+            </a>
           </Link>
         </ul>
         {me ? (
           <>
             <ul>
               <Link href="/meeting">
-                <a>회의생성</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="video-camera" />
+                </a>
               </Link>
             </ul>
             <ul onClick={_onClickLogout}>
               <Link href="/">
-                <a>로그아웃</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="logout" />
+                </a>
               </Link>
             </ul>
           </>
@@ -44,19 +52,32 @@ const Header = () => {
           <>
             <ul>
               <Link href="/login">
-                <a>로그인</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="login" />
+                </a>
               </Link>
             </ul>
             <ul>
               <Link href="/signUp">
-                <a>회원가입</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="enter" />
+                </a>
               </Link>
             </ul>
           </>
         )}
       </li>
-    </>
+    </Cover>
   );
 };
+
+const Cover = styled.div`
+  li {
+    list-style: none;
+  }
+  ul {
+    margin-top: 35px;
+  }
+`;
 
 export default Header;

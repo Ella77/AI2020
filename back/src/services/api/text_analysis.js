@@ -5,10 +5,10 @@
 const os = require("os");
 const CognitiveServicesCredentials = require("@azure/ms-rest-js");
 const TextAnalyticsAPIClient = require("@azure/cognitiveservices-textanalytics");
-const subscription_key = 'e1047290b39849e998fc1c8c2b04d371';
-const endpoint = 'https://concrewtext.cognitiveservices.azure.com/';
-
-const creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscription_key } });
+var config = require("../../config/index.ts");
+let subscriptionKey = config.getValue('textKey');
+const endpoint = config.getValue('textEndpoint');
+const creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscriptionKey } });
 const textAnalyticsClient = new TextAnalyticsAPIClient.TextAnalyticsClient(creds, endpoint);
 
 
@@ -20,9 +20,26 @@ async function getSentiment(jsoninput){
     const sentimentResult = await textAnalyticsClient.sentiment({
         multiLanguageBatchInput: jsoninput
     });
-    console.log(sentimentResult.documents);
+    //console.log(sentimentResult.documents);
     console.log(os.EOL);
-    return sentimentResult.documents
+    var pos = 0;
+    var neu= 0;
+    var neg= 0;
+    var json = [];
+    sentimentResult.documents.forEach(document => {
+        if (document.score>0.6) {
+            pos += 1
+        }
+        else if (document<0.4){
+            neg += 1
+        }
+        else {
+            neu +=1
+        }
+    });
+    json.push({positive:pos,negative:neg,neutral:neu});
+    console.log(json);
+    return json;
 
 }
 
@@ -89,7 +106,7 @@ async function getKeyphrase(jsoninput){
 
 // <entityRecognition>
 async function getEntity(jsoninput){
-    console.log("3. This will perform Entity recognition on the sentences.");
+    //console.log("3. This will perform Entity recognition on the sentences.");
 
     // const entityInputs = {
     //     documents: [
@@ -114,7 +131,7 @@ async function getEntity(jsoninput){
         // console.log(`Document ID: ${document.id}`);
 
         document.entities.forEach(e => {
-            console.log(`${document.id},${e.name}, ${e.type}`);
+            //console.log(`${document.id},${e.name}, ${e.type}`);
             // e.matches.forEach(match =>
             //     console.log(
             //         `\t\tOffset: ${match.offset} Length: ${match.length} Score: ${
@@ -125,6 +142,7 @@ async function getEntity(jsoninput){
             // );
             json.push({name:e.name, type:e.type});
 
+
         });
     });
     console.log(json);
@@ -132,6 +150,8 @@ async function getEntity(jsoninput){
 
     console.log(os.EOL);
 }
+
+//getSentiment(jsoninputs);
 //entityRecognition(jsoninput);
 // </entityRecognition>
 exports.getEntity = getEntity;

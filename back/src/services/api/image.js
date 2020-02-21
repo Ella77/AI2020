@@ -12,7 +12,8 @@ const CognitiveServicesCredentials = require('ms-rest-azure').CognitiveServicesC
 
 // Add your Bing Search V7 subscription key to your environment variables.
 //let subscriptionKey = process.env['BING_SEARCH_V7_SUBSCRIPTION_KEY']
-let subscriptionKey = 'b7b4193639014aeb8e516e8d3e0eb253'
+var config = require("../../config/index.ts");
+let subscriptionKey = config.getValue('bingKey');
 if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
     throw new Error('please set/export the following environment variable: ' + subscriptionKey);
 }
@@ -32,7 +33,7 @@ let imageSearchApiClient = new Search.ImageSearchAPIClient(credentials);
 // function image() {
 //     async.series([
 async function getImage(keyword) {
-    console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
+   // console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
 
     let imageResults = await imageSearchApiClient.imagesOperations.search(keyword);
 
@@ -44,14 +45,13 @@ async function getImage(keyword) {
             let firstImageResult = imageResults.value[0];
             // console.log(`Image result count: ${imageResults.value.length}`);
             // console.log(`First image insights token: ${firstImageResult.imageInsightsToken}`);
-            console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-            console.log(`First image content url: ${firstImageResult.contentUrl}`);
-
+            //console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+            //console.log(`First image content url: ${firstImageResult.contentUrl}`);
             let secondImageResult = imageResults.value[1];
-            console.log(`Second image thumbnail url: ${secondImageResult.thumbnailUrl}`);
-            console.log(`Second image content url: ${secondImageResult.contentUrl}`);
-
-            return [firstImageResult, secondImageResult]
+            //console.log(`Second image thumbnail url: ${secondImageResult.thumbnailUrl}`);
+            //console.log(`Second image content url: ${secondImageResult.contentUrl}`);
+            console.log([firstImageResult.contentUrl, secondImageResult.contentUrl])
+            return [firstImageResult.contentUrl, secondImageResult.contentUrl]
         } else {
             console.log("Couldn't find image results!");
         }

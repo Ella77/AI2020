@@ -1,6 +1,9 @@
 import {MeetingModel, Meeting, Agenda} from '../model/meeting';
 import { UserModel, User } from '../model/user';
 import { ObjectId } from 'bson';
+import {sendMeetingStateChangeEvent, sendCurrentAgendaChangeEvnet} from './socketio';
+import {io} from '../../bin/www';
+import * as _ from 'lodash';
 
 /**
  * @description 이름과 안건들을 받아서 미팅 도큐먼트를 생성해 리턴함
@@ -96,4 +99,60 @@ export const getMeetingById = async (meetingId: ObjectId) => {
     return -1;
   }
   return meeting;
+};
+
+/**
+ * @param sequenceNumber 
+ * @param meetingId 가져올 meeting _id
+ * @return -1 meetingId에 해당하는 meeting이 없을시
+ * @return 0 성공
+ * @return 1 sequenceNumber가 0일때, 회의 시작 처리(첫 agenda 시작)
+ * @return 2 agendas 범위를 넘어갔을 때, 회의 종료 처리
+ */
+export const updateSequenceNumber = async (meetingId: ObjectId, sequenceNumber: any) => {
+  const meeting = await MeetingModel.findById(meetingId);
+  if (!meeting) {
+    return -1;
+  }
+  const nowDate = new Date();
+  const sequenceNumberBeforeUpdate = meeting.sequenceNumberOfCurrentAgenda;
+  const newAgendas: Agenda[] = _.cloneDeep(meeting.agendas);
+
+  if (sequenceNumber === 0) { // 회의 시작
+    meeting.state = 1;
+    meeting.sequenceNumberOfCurrentAgenda = sequenceNumber;
+    newAgendas[0].startDate = nowDate;
+
+    meeting.agendas = newAgendas;
+    await meeting.save();
+
+    sendMeetingStateChangeEvent(io, meetingId.toString(), 1);
+    return 1;
+  }
+
+  newAgendas[sequenceNumberBeforeUpdate] = {
+    ...newAgendas[sequenceNumberBeforeUpdate],
+    usedTime: (nowDate.getTime() - newAgendas[sequenceNumberBeforeUpdate].startDate.getTime()) / 1000,
+    endDate: nowDate
+  };
+  meeting.sequenceNumberOfCurrentAgenda = sequenceNumber;
+
+  if (newAgendas.length <= sequenceNumber) { // 회의 종료 처리
+    meeting.state = 2;
+
+    meeting.agendas = newAgendas;
+    await meeting.save();
+
+    sendMeetingStateChangeEvent(io, meetingId.toString(), 2);
+    return 2;
+  }
+
+  newAgendas[meeting.sequenceNumberOfCurrentAgenda].startDate = nowDate;
+
+  meeting.agendas = newAgendas;
+  await meeting.save();
+  sendCurrentAgendaChangeEvnet(io, meetingId.toString(), sequenceNumber);
+
+  return 0;
+
 };

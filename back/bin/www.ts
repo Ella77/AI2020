@@ -6,7 +6,7 @@
 import app from "../src/app";
 import http from "http";
 import socketIo from 'socket.io';
-import {handShakeForWebRTC} from '../src/services/socketio';
+import {socketEventsInject} from '../src/services/socketio';
 
 /**
  * Get port from environment and store in Express.
@@ -22,7 +22,8 @@ app.set("port", port);
 
 const server = http.createServer(app);
 const io = socketIo(server);
-handShakeForWebRTC(io);
+export {io};
+socketEventsInject(io);
 
 /**
  * Listen on provided port, on all network interfaces.

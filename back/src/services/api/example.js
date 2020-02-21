@@ -1,11 +1,11 @@
 var entity = require('./entity.js');
-//entity.getLocation('newyork burger'); <- type location
+entity.getLocation('newyork restaurants');
+//entity.getDescription('Einstein');
 
 var image = require('./image.js');
-//image.getImage('Obama')
+image.getImage('Obama');
 
-var summarize = require('./summarization.js');
-//summarize.getSummarize('simple text'); <-
+
 
 var text = require('./text_analysis.js');
 
@@ -34,7 +34,8 @@ text.getEntity(jsoninputs);
 text.getKeyphrase(jsoninputs);
 text.getSentiment(jsoninputs);
 
-
+var summarize = require('./summarization.js');
+summarize.getSummarize(jsoninputs);
 
 // function RecordInitialize( sentence  ) {
 //

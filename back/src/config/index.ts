@@ -7,14 +7,23 @@ interface ConfigStore {
   dbURL: string;
   frontURL: string;
   backURL: string;
+  textKey: string;
+  bingKey: string;
+  textEndpoint: string;
+  bingEndpoint: string;
+
 }
-type keys = 'dbURL' | 'frontURL' | 'backURL';
+type keys = 'dbURL' | 'frontURL' | 'backURL' | 'textKey' | 'bingKey' | 'textEndpoint' | 'bingEndpoint';
 
 
 let config: ConfigStore = {
   dbURL: '',
-  frontURL: 'http://localhost:3000',
-  backURL: 'http://localhost:4000'
+  frontURL: '',
+  backURL: '',
+  textKey: '',
+  bingKey: '',
+  textEndpoint : '',
+  bingEndpoint : ''
 };
 
 const STORE_PATH = path.join(__dirname, 'store');
@@ -45,6 +54,14 @@ export function getValue(key: keys): any {
     return config.frontURL;
   case 'backURL':
     return config.backURL;
+  case 'textKey':
+    return config.textKey;
+  case 'bingKey':
+    return config.bingKey;
+  case 'textEndpoint':
+    return config.textEndpoint;
+  case 'bingEndpoint':
+      return config.bingEndpoint;
   default:
     throw new Error(`${key} is not in config`);
   }
@@ -60,6 +77,16 @@ export async function set(key: keys, value: any) {
     break;
   case 'backURL':
     config.backURL = value;
+    break;
+  case 'textKey':
+    config.textKey = value;
+  case 'bingKey':
+    config.bingKey = value;
+    break;
+  case 'textEndpoint':
+    config.textEndpoint = value;
+  case 'bingEndpoint':
+    config.bingEndpoint = value;
     break;
   default:
     throw new Error(`${key} is not in config`);

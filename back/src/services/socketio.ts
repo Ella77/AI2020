@@ -4,7 +4,43 @@ import { MeetingModel } from "../model/meeting";
 import { UserModel } from "../model/user";
 import { ObjectId } from "bson";
 
-export const handShakeForWebRTC = (io: socketIo.Server) => {
+export const sendMeetingStateChangeEvent = (io: socketIo.Server, meetingId: string, state: 1 | 2) => {
+  io.to(meetingId.toString()).emit('stateChange', 
+    {
+      type: 1, // 회의 상태 변경
+      state
+    }
+  );
+};
+
+export const sendCurrentAgendaChangeEvnet = (io: socketIo.Server, meetingId: string, sequenceNumber: number) => {
+  io.to(meetingId.toString()).emit('stateChange', 
+    {
+      type: 2, // 의제 변경
+      sequenceNumberOfCurrentAgenda: sequenceNumber
+    }
+  );
+};
+
+const sendOnlineUsersChangeEvent = (io: socketIo.Server, meetingId: string, onlineUsers: string[]) => {
+  io.to(meetingId.toString()).emit('stateChange', 
+    {
+      type: 3, // 온라인 유저 변경
+      onlineUsers
+    }
+  );
+};
+
+const sendKeywordAddEvent = (io: socketIo.Server, meetingId: string, keywordToAdd: string) => {
+  io.to(meetingId.toString()).emit('stateChange', 
+    {
+      type: 4, // 키워드 추가
+      keywordToAdd
+    }
+  );
+};
+
+export const socketEventsInject = (io: socketIo.Server) => {
   type socketId = string;
   type userId = string;
   type meetingId = string;
@@ -58,6 +94,8 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
         onlineUsers.set(meeting._id.toString(), [user._id.toString()]);
       }
       socketEnterInfo.set(socket.id, [user._id.toString(), meetingId]);
+      sendOnlineUsersChangeEvent(io, meetingId, onlineUsers.get(meetingId)!);
+
       socket.emit("enter", { success: true });
     });
 
@@ -120,14 +158,6 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
       }
     });
 
-    socket.on("getOnlineUser", async data => {
-      const [userId, meetingId] = socketEnterInfo.get(socket.id)!;
-
-      socket.broadcast.to(meetingId).emit("getOnlineUser", {
-        onlineUsers: onlineUsers.get(meetingId)
-      });
-    });
-
     socket.on("disconnect", () => {
       console.log("disconnected");
       const enterInfo = socketEnterInfo.get(socket.id);
@@ -141,6 +171,7 @@ export const handShakeForWebRTC = (io: socketIo.Server) => {
             .get(enterInfo[1])!
             .filter(existsUserId => existsUserId !== enterInfo[0])
         );
+        sendOnlineUsersChangeEvent(io, enterInfo[1], onlineUsers.get(enterInfo[1])!);
       }
       socketEnterInfo.delete(socket.id);
     });

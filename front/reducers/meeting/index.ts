@@ -11,16 +11,24 @@ import {
   GET_MEETINGS_FAILURE,
   GET_MY_MEETINGS_REQUEST,
   GET_MY_MEETINGS_SUCCESS,
-  GET_MY_MEETINGS_FAILURE
+  GET_MY_MEETINGS_FAILURE,
+  GET_MEETING_REQUEST,
+  GET_MEETING_SUCCESS,
+  GET_MEETING_FAILURE
 } from "./actions";
 
 const initialState: meetingStore = {
   meeting: {
     meetings: null,
     currentMeeting: {
-      id: null,
+      _id: null,
       agendas: null,
-      name: null
+      createdAt: null,
+      name: null,
+      updatedAt: null,
+      participants: null,
+      sequenceNumberOfCurrentAgenda: null,
+      state: null
     },
     currentAgendas: []
   },
@@ -50,7 +58,7 @@ export default (state = initialState, action) => {
       }
       case CREATE_MEETING_SUCCESS: {
         draft.loadingStates.isCreatingMeeting = false;
-        draft.meeting.currentMeeting.id = action.result;
+        draft.meeting.currentMeeting._id = action.result;
       }
       case CREATE_MEETING_FAILURE: {
         draft.loadingStates.isCreatingMeeting = false;
@@ -79,6 +87,18 @@ export default (state = initialState, action) => {
       }
 
       case GET_MY_MEETINGS_FAILURE: {
+        break;
+      }
+
+      case GET_MEETING_REQUEST: {
+        break;
+      }
+
+      case GET_MEETING_SUCCESS: {
+        draft.meeting.currentMeeting = action.result;
+        break;
+      }
+      case GET_MEETING_FAILURE: {
         break;
       }
       default: {

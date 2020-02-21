@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { store } from "../../reducers/indext.type";
 import MeetingContainer from "../../components/meeting/meetingRTC/MeetingContainer";
+import { GET_MEETING_REQUEST } from "../../reducers/meeting/actions";
 
 const MeetingID = () => {
   const router = useRouter();
@@ -20,6 +21,14 @@ const MeetingID = () => {
       <MeetingContainer meetingId={router.query.meetingID as string} />
     </div>
   );
+};
+
+MeetingID.getInitialProps = ctx => {
+  console.log(ctx.query);
+  ctx.store.dispatch({
+    type: GET_MEETING_REQUEST,
+    payload: ctx.query.meetingID
+  });
 };
 
 export default MeetingID;

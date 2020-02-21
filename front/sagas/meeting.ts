@@ -11,7 +11,10 @@ import {
   GET_MEETINGS_REQUEST,
   GET_MY_MEETINGS_REQUEST,
   GET_MY_MEETINGS_FAILURE,
-  GET_MY_MEETINGS_SUCCESS
+  GET_MY_MEETINGS_SUCCESS,
+  GET_MEETING_REQUEST,
+  GET_MEETING_SUCCESS,
+  GET_MEETING_FAILURE
 } from "../reducers/meeting/actions";
 
 function createMeetingAPI(data) {
@@ -103,10 +106,36 @@ function* watchGetMyMeetings() {
   yield takeLatest(GET_MY_MEETINGS_REQUEST, getMyMeetings);
 }
 
+function getMeetingAPI(data) {
+  return axios.get(`/meetings/${data}`, {
+    withCredentials: true
+  });
+}
+
+function* getMeeting(action) {
+  try {
+    const result = yield call(getMeetingAPI, action.payload);
+    yield put({
+      type: GET_MEETING_SUCCESS,
+      result: result.data.result
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: GET_MEETING_FAILURE
+    });
+  }
+}
+
+function* watchGetMeeting() {
+  yield takeLatest(GET_MEETING_REQUEST, getMeeting);
+}
+
 export default function* meetingSaga() {
   yield all([
     fork(watchCreateMeeting),
     fork(watchGetMeetings),
-    fork(watchGetMyMeetings)
+    fork(watchGetMyMeetings),
+    fork(watchGetMeeting)
   ]);
 }

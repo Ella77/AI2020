@@ -22,7 +22,7 @@ const list = () => {
               />
             </a>
           </Link>
-          <h1 className="meeting-list-header">생성된 미팅리스트</h1>
+          <h1 className="meeting-list-header">내가 참여한 미팅 리스트</h1>
         </CardHeader>
         {meetings &&
           meetings.map(meeting => {

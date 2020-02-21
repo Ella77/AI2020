@@ -10,6 +10,7 @@ type props = {
     name: string;
     createdAt: string;
     updatedAt: string;
+    state: number;
   };
 };
 
@@ -17,11 +18,20 @@ const MeetingList = (props: props) => {
   const router = useRouter();
 
   const _onClickMeeting = () => {
+    if (props.meeting.state == 2) {
+      router.push(`/meeting/detail/${props.meeting._id}`);
+    }
     router.push(`/meeting/${props.meeting._id}`);
   };
   return (
     <Div onClick={_onClickMeeting}>
       <p>{props.meeting.name}</p>
+      {props.meeting.createdAt}시작
+      {props.meeting.state === 2 ? (
+        <p>종료</p>
+      ) : (
+        props.meeting.state === 1 && <p>진행중</p>
+      )}
     </Div>
   );
 };

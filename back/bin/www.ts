@@ -5,8 +5,8 @@
 
 import app from "../src/app";
 import http from "http";
-import socketIo from 'socket.io';
-import {socketEventsInject} from '../src/services/socketio';
+import socketIo from "socket.io";
+import { socketEventsInject } from "../src/services/socketio";
 
 /**
  * Get port from environment and store in Express.
@@ -21,8 +21,8 @@ app.set("port", port);
  */
 
 const server = http.createServer(app);
-const io = socketIo(server);
-export {io};
+const io = socketIo(server, { pingTimeout: 60000 });
+export { io };
 socketEventsInject(io);
 
 /**
@@ -88,5 +88,3 @@ function onListening() {
   const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr!.port;
   console.log("Listening on " + bind);
 }
-
-

@@ -18,8 +18,8 @@ const ConferenceMakeForm = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentMeeting.id) {
-      router.push(`/meeting/${currentMeeting.id}`);
+    if (currentMeeting && currentMeeting._id) {
+      router.push(`/meeting/${currentMeeting._id}`);
     }
   }, [currentMeeting]);
 

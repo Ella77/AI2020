@@ -44,6 +44,7 @@ function sleep(time) {
 // function entity(keyword) {
 //     async.series([
 async function getDescription(keyword) {
+    await init();
     // await sleep(2000);
 
     let result;
@@ -146,6 +147,7 @@ async function getDescription(keyword) {
 //     }
 // },
 async function getLocation(keyword) {
+    await init();
     //  await sleep(2000);
 
     console.log(os.EOL);

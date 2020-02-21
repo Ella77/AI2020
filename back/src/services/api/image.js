@@ -41,6 +41,7 @@ function sleep(time) {
 // function image() {
 //     async.series([
 async function getImage(keyword) {
+    await init();
    // console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
 
     let imageResults = await imageSearchApiClient.imagesOperations.search(keyword);

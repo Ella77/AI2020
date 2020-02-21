@@ -3,7 +3,11 @@ import path from 'path';
 import jsonfile from 'jsonfile';
 import logger from '../utils/logger';
 
+function sleep(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 interface ConfigStore {
+  loadState: 0 | 1;
   dbURL: string;
   frontURL: string;
   backURL: string;
@@ -17,6 +21,7 @@ type keys = 'dbURL' | 'frontURL' | 'backURL' | 'textKey' | 'bingKey' | 'textEndp
 
 
 let config: ConfigStore = {
+  loadState: 0,
   dbURL: '',
   frontURL: '',
   backURL: '',
@@ -39,6 +44,7 @@ fs.exists(STORE_PATH, async (exists) => {
     try {
       const file = await jsonfile.readFile(STORE_PATH);
       config = Object.assign(config, file);
+      config.loadState = 1;
     } catch (err) {
       logger.error(err, 'config');
     }
@@ -46,7 +52,10 @@ fs.exists(STORE_PATH, async (exists) => {
   await update();
 });
 
-export function getValue(key: keys): any {
+export async function getValue(key: keys): Promise<any> {
+  while (config.loadState === 0) {
+    await sleep(100);
+  }
   switch (key) {
   case 'dbURL':
     return config.dbURL;
@@ -61,7 +70,7 @@ export function getValue(key: keys): any {
   case 'textEndpoint':
     return config.textEndpoint;
   case 'bingEndpoint':
-      return config.bingEndpoint;
+    return config.bingEndpoint;
   default:
     throw new Error(`${key} is not in config`);
   }

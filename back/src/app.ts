@@ -14,8 +14,8 @@ import Router from "./routes";
 
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
-function mongoinit() {
-  const db = getValue("dbURL");
+async function mongoinit() {
+  const db = await getValue("dbURL");
   logger.info("DB", db);
   mongoose
     .connect(db, {

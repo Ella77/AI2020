@@ -18,12 +18,13 @@ export type Search = {
   comeup: number;
 
 }
+export type MeetingState = 0 | 1 | 2 // 0 회의 시작 이전, 1 회의 진행중, 2 회의 종료
 
 export type Agenda = {
   name: string;
   
   expectedTime: number; // minute
-  usedTime: number; // minute
+  usedTime: number; // second
 
   startDate: Date;
   endDate: Date | null;
@@ -38,6 +39,7 @@ export interface Meeting extends mongoose.Document {
   sequenceNumberOfCurrentAgenda: number; // 현재 논의 중인 의제, 0부터 시작
   agendas: Agenda[];
   participants: ObjectId[] | User[];
+  state: MeetingState;
 }
 
 const schema = new mongoose.Schema({
@@ -58,6 +60,10 @@ const schema = new mongoose.Schema({
       type: ObjectId,
       ref: 'User'
     }]
+  },
+  state: {
+    default: 0,
+    type: Number
   }
 }, {
   timestamps: true

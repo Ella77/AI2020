@@ -6,11 +6,19 @@ const os = require("os");
 const CognitiveServicesCredentials = require("@azure/ms-rest-js");
 const TextAnalyticsAPIClient = require("@azure/cognitiveservices-textanalytics");
 var config = require("../../config/index.ts");
-let subscriptionKey = config.getValue('textKey');
-const endpoint = config.getValue('textEndpoint');
-const creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscriptionKey } });
-const textAnalyticsClient = new TextAnalyticsAPIClient.TextAnalyticsClient(creds, endpoint);
 
+let subscriptionKey;
+let endpoint;
+let creds;
+let textAnalyticsClient;
+
+async function init() {
+    subscriptionKey = await config.getValue('textKey');
+    endpoint = config.getValue('textEndpoint');
+    creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscriptionKey } });
+    textAnalyticsClient = new TextAnalyticsAPIClient.TextAnalyticsClient(creds, endpoint);
+}
+init();
 
 async function getSentiment(jsoninput){
 

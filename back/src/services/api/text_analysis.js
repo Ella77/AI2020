@@ -6,13 +6,22 @@ const os = require("os");
 const CognitiveServicesCredentials = require("@azure/ms-rest-js");
 const TextAnalyticsAPIClient = require("@azure/cognitiveservices-textanalytics");
 var config = require("../../config/index.ts");
-let subscriptionKey = config.getValue('textKey');
-const endpoint = config.getValue('textEndpoint');
-const creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscriptionKey } });
-const textAnalyticsClient = new TextAnalyticsAPIClient.TextAnalyticsClient(creds, endpoint);
 
+let subscriptionKey;
+let endpoint;
+let creds;
+let textAnalyticsClient;
+
+async function init() {
+    subscriptionKey = await config.getValue('textKey');
+    endpoint = await config.getValue('textEndpoint');
+    creds = new CognitiveServicesCredentials.ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': subscriptionKey } });
+    textAnalyticsClient = new TextAnalyticsAPIClient.TextAnalyticsClient(creds, endpoint);
+}
+init();
 
 async function getSentiment(jsoninput){
+    await init();
 
    // console.log("This will perform sentiment analysis on the sentences.");
     // const sentimentInput = 'I had the best day of my life.This was a waste of my time. The speaker put me to sleep.'
@@ -73,6 +82,7 @@ async function getSentiment(jsoninput){
 
 // <keyPhraseExtraction>
 async function getKeyphrase(jsoninput){
+    await init();
 
    // console.log("2. This will extract key phrases from the sentences.");
     // const keyPhrasesInput = {
@@ -106,6 +116,8 @@ async function getKeyphrase(jsoninput){
 
 // <entityRecognition>
 async function getEntity(jsoninput){
+    await init();
+
     //console.log("3. This will perform Entity recognition on the sentences.");
 
     // const entityInputs = {

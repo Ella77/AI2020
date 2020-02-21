@@ -13,11 +13,20 @@ const CognitiveServicesCredentials = require('ms-rest-azure').CognitiveServicesC
 // Add your Bing Search V7 subscription key to your environment variables.
 //let subscriptionKey = process.env['BING_SEARCH_V7_SUBSCRIPTION_KEY']
 var config = require("../../config/index.ts");
-let subscriptionKey = config.getValue('bingKey');
-if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
-    throw new Error('please set/export the following environment variable: ' + subscriptionKey);
-}
 
+let subscriptionKey;
+let credentials;
+let imageSearchApiClient;
+async function init() {
+
+    subscriptionKey = await config.getValue('bingKey');
+    if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
+        throw new Error('please set/export the following environment variable: ' + subscriptionKey);
+    }
+    credentials = new CognitiveServicesCredentials(subscriptionKey);
+    imageSearchApiClient = new Search.ImageSearchAPIClient(credentials);
+}
+init();
 ///////////////////////////////////////////
 //     Entrypoint for sample script      //
 ///////////////////////////////////////////
@@ -27,12 +36,12 @@ function sleep(time) {
 }
 
 
-let credentials = new CognitiveServicesCredentials(subscriptionKey);
-let imageSearchApiClient = new Search.ImageSearchAPIClient(credentials);
+
 //
 // function image() {
 //     async.series([
 async function getImage(keyword) {
+    await init();
    // console.log("1. This will search images for  then verify number of results and print out first image result, pivot suggestion, and query expansion");
 
     let imageResults = await imageSearchApiClient.imagesOperations.search(keyword);

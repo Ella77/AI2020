@@ -13,18 +13,28 @@ const CognitiveServicesCredentials = require('ms-rest-azure').CognitiveServicesC
 
 //let subscriptionKey = process.env['BING_ENTITY_SEARCH_SUBSCRIPTION_KEY']
 var config = require("../../config/index.ts");
-let subscriptionKey =  config.getValue('bingKey');
-if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
-    throw new Error('Set/export your subscription key as an environment variable.');
+
+let subscriptionKey;
+let credentials;
+let entitySearchApiClient;
+let entityModels;
+
+async function init() {
+    subscriptionKey = await config.getValue('bingKey');
+    console.log(subscriptionKey);
+    if (subscriptionKey == null || subscriptionKey == "" || subscriptionKey == undefined) {
+        throw new Error('Set/export your subscription key as an environment variable.');
+    }
+    
+    ///////////////////////////////////////////
+    //     Entrypoint for sample script      //
+    ///////////////////////////////////////////
+    
+    credentials = new CognitiveServicesCredentials(subscriptionKey);
+    entitySearchApiClient = new Search.EntitySearchAPIClient(credentials);
+    entityModels = entitySearchApiClient.models;
 }
-
-///////////////////////////////////////////
-//     Entrypoint for sample script      //
-///////////////////////////////////////////
-
-let credentials = new CognitiveServicesCredentials(subscriptionKey);
-let entitySearchApiClient = new Search.EntitySearchAPIClient(credentials);
-let entityModels = entitySearchApiClient.models;
+init();
 
 function sleep(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -34,6 +44,7 @@ function sleep(time) {
 // function entity(keyword) {
 //     async.series([
 async function getDescription(keyword) {
+    await init();
     // await sleep(2000);
 
     let result;
@@ -136,6 +147,7 @@ async function getDescription(keyword) {
 //     }
 // },
 async function getLocation(keyword) {
+    await init();
     //  await sleep(2000);
 
     console.log(os.EOL);

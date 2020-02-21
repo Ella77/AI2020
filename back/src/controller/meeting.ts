@@ -3,6 +3,8 @@ import validate from 'validate.js';
 import * as meetingServices from '../services/meeting';
 import {ObjectId} from 'bson';
 import { Meeting } from '../model/meeting';
+import {sendCurrentAgendaChangeEvnet} from '../services/socketio';
+import { io } from '../../bin/www';
 
 export const postMeeting = wrapper(async (req, res) => {
   const input = {
@@ -24,7 +26,6 @@ export const postMeeting = wrapper(async (req, res) => {
   if (invalid) {
     return res.status(400).json({msg: invalid});
   }
-  const startDate = new Date();
   for (let i = 0 ; i < (input.agendas as any[]).length ; i ++) {
     const keys = Object.keys(input.agendas[i]);
     for (let j = 0 ; j < keys.length ; j ++) {
@@ -38,7 +39,6 @@ export const postMeeting = wrapper(async (req, res) => {
     }
     input.agendas[i] = {
       ...input.agendas[i],
-      startDate,
       records: [],
       usedTime: 0,
       endDate: null      
@@ -119,4 +119,29 @@ export const getMeetingById = wrapper(async (req, res) => {
     return res.status(404).json({msg: 'Meeting not found'});
   }
   res.status(200).json({result: meeting});
+});
+
+export const updateSequenceNumber = wrapper(async (req, res) => {
+  const input = {
+    meetingId: req.params.meetingId,
+    sequenceNumber: parseInt(req.body.sequenceNumber)
+  };
+
+  const invalid = validate(input, {
+    meetingId: {
+      objectid: true
+    },
+    sequenceNumber: {
+      presence: true,
+      type: 'number'
+    }
+  });
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+  const meeting = await meetingServices.updateSequenceNumber(new ObjectId(input.meetingId), input.sequenceNumber);
+  if (meeting === -1) {
+    return res.status(404).json({msg: 'Meeting not found'});
+  }
+  return res.status(200).json({success: true});
 });

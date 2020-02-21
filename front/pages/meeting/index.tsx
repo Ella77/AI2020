@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { store } from "../../reducers/indext.type";
 import { useRouter } from "next/dist/client/router";
 import { LOAD_USER_REQUEST } from "../../reducers/user/actions";
+import styled from "styled-components";
 
 const meeting = () => {
   const [first, setFirst] = useState(true);
@@ -29,11 +30,7 @@ const meeting = () => {
     return <div></div>;
   }
 
-  return (
-    <div>
-      <MeetingCreateForm />
-    </div>
-  );
+  return <MeetingCreateForm />;
 };
 
 export default meeting;

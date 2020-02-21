@@ -108,13 +108,7 @@ class Audio extends Component<Props, States> {
   render() {
     return (
       <div>
-        <video
-          id="local-video"
-          style={{ width: 100, height: 100, backgroundColor: "black" }}
-          ref={this.localVideoRef}
-          autoPlay
-          playsInline
-        />
+        <video id="local-video" ref={this.localVideoRef} autoPlay playsInline />
         <video
           id="remote-video"
           style={{

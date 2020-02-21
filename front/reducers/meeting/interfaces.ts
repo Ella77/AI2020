@@ -8,9 +8,11 @@ type agenda = {
 };
 
 type meeting = {
-  id: string;
+  _id: string;
   name: string;
   agendas: agenda[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 /* 로딩 상태 */
@@ -24,7 +26,11 @@ export interface metaStates {}
 export interface meetingStore {
   meeting: {
     meetings: meeting[] | null;
-    currentMeeting: meeting | null;
+    currentMeeting: {
+      id: string;
+      name: string;
+      agendas: agenda[];
+    } | null;
     currentAgendas: agenda[] | null;
   };
   metaStates: metaStates;

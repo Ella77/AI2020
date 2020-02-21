@@ -5,7 +5,13 @@ import {
   DELETE_AGENDA,
   CREATE_MEETING_REQUEST,
   CREATE_MEETING_SUCCESS,
-  CREATE_MEETING_FAILURE
+  CREATE_MEETING_FAILURE,
+  GET_MEETINGS_REQUEST,
+  GET_MEETINGS_SUCCESS,
+  GET_MEETINGS_FAILURE,
+  GET_MY_MEETINGS_REQUEST,
+  GET_MY_MEETINGS_SUCCESS,
+  GET_MY_MEETINGS_FAILURE
 } from "./actions";
 
 const initialState: meetingStore = {
@@ -51,6 +57,30 @@ export default (state = initialState, action) => {
         break;
       }
 
+      case GET_MEETINGS_REQUEST: {
+        break;
+      }
+      case GET_MEETINGS_SUCCESS: {
+        draft.meeting.meetings = action.result;
+        break;
+      }
+      case GET_MEETINGS_FAILURE: {
+        break;
+      }
+
+      case GET_MY_MEETINGS_REQUEST: {
+        break;
+      }
+
+      case GET_MY_MEETINGS_SUCCESS: {
+        draft.meeting.meetings = action.result;
+
+        break;
+      }
+
+      case GET_MY_MEETINGS_FAILURE: {
+        break;
+      }
       default: {
         break;
       }

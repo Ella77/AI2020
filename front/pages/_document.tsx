@@ -1,6 +1,7 @@
 import Document, { Head, Main, NextScript } from "next/document";
 // Import styled components ServerStyleSheet
-import { ServerStyleSheet } from "styled-components";
+import styled, { ServerStyleSheet } from "styled-components";
+import "./styles.scss";
 
 export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
@@ -30,11 +31,23 @@ export default class MyDocument extends Document {
             this.props.styleTags
           }
         </Head>
-        <body>
+        <Body>
           <Main />
           <NextScript />
-        </body>
+        </Body>
       </html>
     );
   }
 }
+
+const Body = styled.body`
+  height: 100%;
+  div#__next {
+    height: 100%;
+  }
+  h1.meeting-list-header {
+    display: inline;
+    font-size: 30px;
+    margin-left: 40px;
+  }
+`;

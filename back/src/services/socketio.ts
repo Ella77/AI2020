@@ -4,7 +4,7 @@ import { MeetingModel } from "../model/meeting";
 import { UserModel } from "../model/user";
 import { ObjectId } from "bson";
 
-export const handShakeForWebRTC = (io: socketIo.Server) => {
+export const socketEventsInject = (io: socketIo.Server) => {
   type socketId = string;
   type userId = string;
   type meetingId = string;

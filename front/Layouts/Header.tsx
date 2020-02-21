@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "../reducers/indext.type";
 import { LOGOUT, LOAD_USER_REQUEST } from "../reducers/user/actions";
+import { Icon } from "antd";
+import {} from "styled-components";
 
 const Header = () => {
   const { me } = useSelector((state: store) => state.user);
@@ -21,22 +23,28 @@ const Header = () => {
   };
   return (
     <>
-      <li>
+      <li className="header">
         <ul>
           <Link href="/">
-            <a>Home</a>
+            <a>
+              <Icon style={{ fontSize: 30 }} type="home" />
+            </a>
           </Link>
         </ul>
         {me ? (
           <>
             <ul>
               <Link href="/meeting">
-                <a>회의생성</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="video-camera" />
+                </a>
               </Link>
             </ul>
             <ul onClick={_onClickLogout}>
               <Link href="/">
-                <a>로그아웃</a>
+                <a>
+                  <Icon style={{ fontSize: 30 }} type="logout" />
+                </a>
               </Link>
             </ul>
           </>
@@ -58,5 +66,7 @@ const Header = () => {
     </>
   );
 };
+
+const Cover = styled;
 
 export default Header;

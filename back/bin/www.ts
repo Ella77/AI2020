@@ -22,6 +22,7 @@ app.set("port", port);
 
 const server = http.createServer(app);
 const io = socketIo(server);
+export {io};
 socketEventsInject(io);
 
 /**

@@ -8,5 +8,6 @@ Router.post('/', verifyLogin, meetingController.postMeeting);
 Router.post('/:meetingId/enter', verifyLogin, meetingController.enterMeeting);
 Router.get('/', meetingController.getEntireMeetings);
 Router.get('/:meetingId', meetingController.getMeetingById);
+Router.put('/:meetingId/agenda-sequence', meetingController.updateSequenceNumber);
 
 export default Router;

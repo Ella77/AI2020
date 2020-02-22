@@ -25,6 +25,7 @@ type props = {
 type state = {
   text: string;
   caption: string;
+  emphasize: string[];
   sequenceNumberOfCurrentAgenda: number;
   state: number;
   participants: any;
@@ -43,6 +44,7 @@ class STT extends Component<props, state> {
     this.state = {
       text: "",
       caption: "",
+      emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
       meetingState: 1,
@@ -72,6 +74,7 @@ class STT extends Component<props, state> {
       };
       this.recognizer.recognizeOnceAsync(
         result => {
+          console.log(123123);  
           console.log(result);
           if (result.text) {
             this.setState({ text: result.text });
@@ -133,6 +136,7 @@ class STT extends Component<props, state> {
     this.props.socket.on("talk", data => {
       console.log("talk", data);
       this.setState({ caption: data.talking });
+      this.setState({ emphasize: data.emphasize});
       this.setState({ state: 1 });
     });
     this.props.socket.on("stateChange", data => {
@@ -230,7 +234,18 @@ class STT extends Component<props, state> {
           ))}
         </AvatarDiv>
         <CaptionDiv id="warning">
-          <p>caption: {this.state.caption}</p>
+          <p>caption: 
+            {this.state.caption.split(' ').map((word) => {
+              if (this.state.emphasize.findIndex((emphasizeWord) => {
+                return (emphasizeWord === word) || (emphasizeWord === word.slice(0, word.length - 1));
+              }) !== -1) {
+                console.log(word);
+                return <span style={{fontWeight: 'bold'}}>{word + ' '}</span>
+              } else {
+                return <span>{word + ' '}</span>
+              }
+            })}
+          </p>
         </CaptionDiv>
       </div>
     );
@@ -262,6 +277,9 @@ const CaptionDiv = styled.div`
     color: white;
     text-align: center;
     font-size: 15px;
+    span {
+      white-space:pre;
+    }
   }
 `;
 

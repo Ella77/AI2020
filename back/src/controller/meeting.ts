@@ -41,9 +41,17 @@ export const postMeeting = wrapper(async (req, res) => {
       ...input.agendas[i],
       records: [],
       usedTime: 0,
-      endDate: null      
+      endDate: null,
+
+      entities: [],
+      sentiment: {
+        positive: 0,
+        negative: 0,
+        neutral: 0,
+      }
     };
   }
+  
 
   const meeting = await meetingServices.postMeeting(input.name, input.agendas);
   await meetingServices.enterMeeting(req.user!._id, meeting._id); // 성공이 보장됨.

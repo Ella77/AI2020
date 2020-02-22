@@ -30,6 +30,7 @@ type state = {
   state: number;
   participants: any;
   meetingState: number;
+  currentKeywords: any;
 };
 
 class STT extends Component<props, state> {
@@ -47,6 +48,7 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
+      currentKeywords: [],
       meetingState: 1,
       participants: []
     };
@@ -74,7 +76,7 @@ class STT extends Component<props, state> {
       };
       this.recognizer.recognizeOnceAsync(
         result => {
-          console.log(123123);  
+          console.log(123123);
           console.log(result);
           if (result.text) {
             this.setState({ text: result.text });
@@ -95,7 +97,7 @@ class STT extends Component<props, state> {
       );
     } else {
       this.setState({ state: 0 });
-      this.recognizer.close();
+      if (this.recognizer) this.recognizer.close();
       this.recognizer = null;
     }
   }
@@ -136,8 +138,11 @@ class STT extends Component<props, state> {
     this.props.socket.on("talk", data => {
       console.log("talk", data);
       this.setState({ caption: data.talking });
-      this.setState({ emphasize: data.emphasize});
+      this.setState({ emphasize: data.emphasize });
       this.setState({ state: 1 });
+      if (!this.recognizer) {
+        this.handle(1);
+      }
     });
     this.props.socket.on("stateChange", data => {
       console.log(data);
@@ -156,7 +161,8 @@ class STT extends Component<props, state> {
           } else {
             this.setState({
               sequenceNumberOfCurrentAgenda: data.sequenceNumberOfCurrentAgenda,
-              state: 0
+              state: 0,
+              currentKeywords: []
             });
             if (this.recognizer) {
               this.handle(2);
@@ -185,6 +191,11 @@ class STT extends Component<props, state> {
   render() {
     return (
       <div>
+        <KeywordDiv>
+          {this.state.currentKeywords.map(keyword => {
+            return <div>{keyword}</div>;
+          })}
+        </KeywordDiv>
         {this.props.currentMeeting.agendas.map((agenda, index) => {
           if (
             index == this.state.sequenceNumberOfCurrentAgenda ||
@@ -210,6 +221,7 @@ class STT extends Component<props, state> {
             />
           );
         })}
+
         {this.state.meetingState === 2 && (
           <EndAlarm>
             회의 종료
@@ -222,6 +234,7 @@ class STT extends Component<props, state> {
             </div>
           </EndAlarm>
         )}
+
         <AvatarDiv>
           {this.state.participants.map(participant => (
             <Avatar
@@ -234,15 +247,36 @@ class STT extends Component<props, state> {
           ))}
         </AvatarDiv>
         <CaptionDiv id="warning">
-          <p>caption: 
-            {this.state.caption.split(' ').map((word) => {
-              if (this.state.emphasize.findIndex((emphasizeWord) => {
-                return (emphasizeWord === word) || (emphasizeWord === word.slice(0, word.length - 1));
-              }) !== -1) {
+          <p>
+            caption:
+            {this.state.caption.split(" ").map(word => {
+              if (
+                this.state.emphasize.findIndex(emphasizeWord => {
+                  return (
+                    emphasizeWord === word ||
+                    emphasizeWord === word.slice(0, word.length - 1)
+                  );
+                }) !== -1
+              ) {
                 console.log(word);
-                return <span style={{fontWeight: 'bold'}}>{word + ' '}</span>
+                let flag = true;
+                if (this.state.currentKeywords.length < 1) {
+                  this.setState({ currentKeywords: [word] });
+                } else {
+                  this.state.currentKeywords.map(keyword => {
+                    if (keyword === word) {
+                      flag = false;
+                    }
+                  });
+                  if (flag)
+                    this.setState(prev => ({
+                      currentKeywords: [...prev.currentKeywords, word]
+                    }));
+                }
+                console.log(this.state.currentKeywords);
+                return <span style={{ fontWeight: "bold" }}>{word + " "}</span>;
               } else {
-                return <span>{word + ' '}</span>
+                return <span>{word + " "}</span>;
               }
             })}
           </p>
@@ -251,6 +285,14 @@ class STT extends Component<props, state> {
     );
   }
 }
+
+const KeywordDiv = styled.div`
+  font-size: 20px;
+  color: white;
+  display: inline-block;
+  margin-top: 400px;
+  position: absolute;
+`;
 
 const EndAlarm = styled.h1`
   text-align: center;
@@ -278,7 +320,7 @@ const CaptionDiv = styled.div`
     text-align: center;
     font-size: 15px;
     span {
-      white-space:pre;
+      white-space: pre;
     }
   }
 `;

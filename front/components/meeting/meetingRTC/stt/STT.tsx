@@ -55,16 +55,7 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
-      currentKeywords: [
-        { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 2 },
-        { name: "test1", type: "a", weight: 3 },
-        { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 1 }
-      ],
+      currentKeywords: [],
       meetingState: 1,
       participants: [],
       keywordChangeFlag: false
@@ -237,7 +228,7 @@ class STT extends Component<props, state> {
 
   render() {
     return (
-      <div>
+      <>
         <KeywordDiv>
           {this.state.currentKeywords.slice(5).map((keyword, index) => {
             return (
@@ -320,7 +311,6 @@ class STT extends Component<props, state> {
         </AvatarDiv>
         <CaptionDiv id="warning">
           <p>
-            caption:
             {this.state.keywordChangeFlag &&
               this.state.caption.split(" ").map(word => {
                 if (
@@ -388,7 +378,7 @@ class STT extends Component<props, state> {
               })}
           </p>
         </CaptionDiv>
-      </div>
+      </>
     );
   }
 }
@@ -405,7 +395,7 @@ const KeywordDiv2 = styled.div`
   color: white;
   display: inline-block;
   margin-top: 300px;
-  margin-left:700px
+  margin-left: 700px;
   position: absolute;
 `;
 
@@ -430,6 +420,7 @@ const CaptionDiv = styled.div`
   width: 100%;
   opacity: 0.7;
   background-color: #000000;
+  min-height: 40px;
   p {
     color: white;
     text-align: center;

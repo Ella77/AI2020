@@ -27,7 +27,12 @@ const meeting = () => {
   }, [me]);
 
   if (!me) {
-    return <h1>로그인이 필요합니다</h1>;
+    return (
+      <Div>
+        <h1>정말 반갑습니다!</h1>
+        <h1>하지만 로그인이 필요합니다ㅠㅠ</h1>
+      </Div>
+    );
   }
 
   return (
@@ -37,6 +42,15 @@ const meeting = () => {
     </>
   );
 };
+
+const Div = styled.div`
+  justify-content: center;
+  margin-top: 350px;
+  h1 {
+    color: white;
+    font-size: 30px;
+  }
+`;
 
 const H1 = styled.h1`
   color: white;

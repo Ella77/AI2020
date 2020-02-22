@@ -153,3 +153,64 @@ export const updateSequenceNumber = wrapper(async (req, res) => {
   }
   return res.status(200).json({success: true});
 });
+
+
+export const Deepsearch = wrapper(async (req, res) => {
+  const input = {
+    name: req.params.name,
+    type : req.params.type
+  };
+
+  const invalid = validate(input, {
+    name: {
+      presence: true,
+      type: 'string'
+    },
+    type: {
+      presence: true,
+      type: 'string'
+    },
+  });
+  if (invalid) {
+    return res.status(400).json({msg: invalid});
+  }
+  const entity= require('../services/api/entity.js');
+  const image = require('../services/api/image.js');
+  var result = [];
+  if (type=='Location'){
+    try {
+      result.push({"imageurls":image.getImage(name)});
+    }
+    catch{
+      result.push({"imageurls":NaN})
+    }
+    try {
+      result.push({"description":entity.getDescription(name)});
+    }
+    catch{
+      result.push({"description":NaN})
+    }
+    try{
+      result.push({"islocation":entity.getLocation(name)});
+    }
+    catch{
+      result.push({"islocation":NaN})
+    }
+  }
+  if (type=='Person' || 'Organization') {
+    try {
+      result.push(entity.getDescription(name));
+    }
+    catch{
+      result.push({"description":NaN})
+    }
+    try {
+      result.push({"imageurls":image.getImage(name)});
+    }
+    catch{
+      result.push({"imageurls":NaN})
+    }
+
+  }
+  res.status(200).json({result: result});
+});

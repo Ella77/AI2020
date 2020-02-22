@@ -191,7 +191,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
         io.to(meetingId).emit("talk", {
           speaker: userId,
           talking: data.talking,
-          emphasize: (await text.getKeyphrase([data.talking]))?.keyPhrases
+          emphasize: (await text.getKeyphrase([data.talking]))?.[0].keyPhrases
         });
       } else if (lastTalkingInfo[0] === userId) {
         // 기존 화자가 이어서 말할 때
@@ -200,7 +200,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
         console.log(await text.getKeyphrase([newTalking]));
         console.log(typeof await text.getKeyphrase([newTalking]));
         io.to(meetingId).emit("talk", { speaker: userId, talking: newTalking,
-          emphasize: (await text.getKeyphrase([newTalking])[0] as KeyPhrase)?.keyPhrases
+          emphasize: (await text.getKeyphrase([newTalking]))?.[0].keyPhrases
         });
       } else {
         // 화자가 변경되었을 때
@@ -225,7 +225,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
         io.to(meetingId).emit("talk", {
           speaker: userId,
           talking: data.talking,
-          emphasize: (await text.getKeyphrase([lastTalkingInfo[1]])[0] as KeyPhrase)?.keyPhrases
+          emphasize: (await text.getKeyphrase([lastTalkingInfo[1]]))?.[0].keyPhrases
         });
       }
     });

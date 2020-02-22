@@ -22,7 +22,38 @@ const meetingID = () => {
       <Col span={12}>
         <CardCover>
           <Card style={{ marginTop: 100 }}>
-            <h1>속 기 록</h1>
+            <h1 style={{ fontSize: 40 }}>회의명: {currentMeeting.name}</h1>
+            <p>
+              전체적인 회의 분위기:
+              <span
+                style={{ fontSize: 20, fontWeight: "bold", color: "black" }}
+              >
+                {
+                  //@ts-ignore
+                  currentMeeting.detail.max_sentiment
+                }
+              </span>
+            </p>
+            <p>
+              {currentMeeting.participants.map((a, index) => {
+                return (
+                  <p>
+                    {
+                      //@ts-ignore
+                      currentMeeting.detail.talkingRatio[index].nickname
+                    }
+                    님이{" "}
+                    <span style={{ color: "red" }}>
+                      {Math.floor(
+                        //@ts-ignore
+                        currentMeeting.detail.talkingRatio[index].ratio
+                      )}
+                      %만큼 회의에 참여
+                    </span>
+                  </p>
+                );
+              })}
+            </p>
             <h3>참여자</h3>
             {currentMeeting.participants.map(participant => {
               return <Avatar>{participant.nickname}</Avatar>;

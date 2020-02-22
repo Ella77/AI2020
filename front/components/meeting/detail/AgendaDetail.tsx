@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { store } from "../../../reducers/indext.type";
-import { Avatar } from "antd";
+import { Avatar, Icon } from "antd";
 import styled from "styled-components";
 
 const AgendaDetail = ({ agenda, currentMeeting }) => {
@@ -9,6 +9,15 @@ const AgendaDetail = ({ agenda, currentMeeting }) => {
     <div>
       <h1>{agenda.name}</h1>
       <h1>속기록</h1>
+      {agenda.sentiment.neutral > 5 ? (
+        <Icon style={{ fontSize: 40 }} type="meh" />
+      ) : agenda.sentiment.positive > 7 ? (
+        <Icon style={{ fontSize: 40 }} type="smile" />
+      ) : agenda.sentiment.negative > 7 ? (
+        <Icon style={{ fontSize: 40 }} type="frown" />
+      ) : (
+        <Icon style={{ fontSize: 40 }} type="meh" />
+      )}
       {agenda.records.map(record => {
         return (
           <Div key={record.sentence}>
@@ -16,6 +25,7 @@ const AgendaDetail = ({ agenda, currentMeeting }) => {
               if (participant._id === record.userId)
                 return <Avatar>{participant.nickname}</Avatar>;
             })}
+            {" : "}
             {record.sentence}
             <KeywordTitle>Keyword</KeywordTitle>
             {record.keyPhrases &&

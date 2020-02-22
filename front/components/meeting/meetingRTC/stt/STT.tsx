@@ -55,7 +55,8 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
-      currentKeywords: [/*
+      currentKeywords: [
+        /*
         { name: "test1", type: "a", weight: 1 },
         { name: "test1", type: "a", weight: 2 },
         { name: "test1", type: "a", weight: 3 },
@@ -237,15 +238,31 @@ class STT extends Component<props, state> {
 
   render() {
     return (
-      <div>
+      <>
         <KeywordDiv>
-        {this.state.currentKeywords.map((keyword, idx) => {
-            return <div style={{
-              position: 'absolute',
-              fontSize: 30 + keyword.weight * 5,
-              left: 440 + 200 * Math.cos(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95),
-              top: 380 - 200 * Math.sin(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95)
-            }}>{keyword.name}</div>;
+          {this.state.currentKeywords.map((keyword, idx) => {
+            return (
+              <div
+                style={{
+                  position: "absolute",
+                  fontSize: 30 + keyword.weight * 5,
+                  left:
+                    440 +
+                    200 *
+                      Math.cos((Math.PI / 3) * idx) *
+                      (Math.floor(idx / 6 + 1) * 0.5 + 0.7) *
+                      (Math.random() * 0.1 + 0.95),
+                  top:
+                    380 -
+                    200 *
+                      Math.sin((Math.PI / 3) * idx) *
+                      (Math.floor(idx / 6 + 1) * 0.5 + 0.7) *
+                      (Math.random() * 0.1 + 0.95)
+                }}
+              >
+                {keyword.name}
+              </div>
+            );
           })}
         </KeywordDiv>
         {this.props.currentMeeting.agendas.map((agenda, index) => {
@@ -299,7 +316,6 @@ class STT extends Component<props, state> {
         </AvatarDiv>
         <CaptionDiv id="warning">
           <p>
-            caption:
             {this.state.keywordChangeFlag &&
               this.state.caption.split(" ").map(word => {
                 if (
@@ -319,7 +335,7 @@ class STT extends Component<props, state> {
               })}
           </p>
         </CaptionDiv>
-      </div>
+      </>
     );
   }
 }
@@ -330,7 +346,6 @@ const KeywordDiv = styled.div`
   display: inline-block;
   position: absolute;
 `;
-
 
 const EndAlarm = styled.h1`
   text-align: center;
@@ -353,6 +368,7 @@ const CaptionDiv = styled.div`
   width: 100%;
   opacity: 0.7;
   background-color: #000000;
+  min-height: 40px;
   p {
     color: white;
     text-align: center;

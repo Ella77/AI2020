@@ -5,8 +5,10 @@ import styled from "styled-components";
 const CurrentAgenda = ({ agenda, onPress, state }) => {
   const [usedTime, setUsedTime] = useState(0);
   useEffect(() => {
-    setInterval(() => setUsedTime(usedTime + 1), 1000);
-  })
+    setTimeout(() => {
+      setUsedTime(usedTime + 1)
+    }, 1000);
+  }, [usedTime])
   if (state === 1) {
     return (
       <Div className="current-agenda" onClick={onPress}>

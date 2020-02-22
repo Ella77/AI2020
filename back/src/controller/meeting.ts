@@ -39,6 +39,7 @@ export const postMeeting = wrapper(async (req, res) => {
     }
     input.agendas[i] = {
       ...input.agendas[i],
+      expectedTime: input.agendas[i].expectedTime * 60,
       records: [],
       usedTime: 0,
       endDate: null,

@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
 const CurrentAgenda = ({ agenda, onPress, state }) => {
+  const [usedTime, setUsedTime] = useState(0);
+  useEffect(() => {
+    setTimeout(() => {
+      setUsedTime(usedTime + 1)
+    }, 1000);
+  }, [usedTime])
   if (state === 1) {
     return (
       <Div className="current-agenda" onClick={onPress}>
+        <div style={{position: 'absolute', fontSize: 20, color: 'white', top: -40}}>{Math.floor((agenda.expectedTime- usedTime) / 60) + ' : ' + (agenda.expectedTime- usedTime) % 60}</div>
         <p>{agenda.name}</p>
       </Div>
     );
   }
   return (
     <CurrentDiv className="current-agenda" onClick={onPress}>
+        <div style={{position: 'absolute', fontSize: 20, color: 'white', top: -40}}>{Math.floor((agenda.expectedTime- usedTime) / 60) + ' : ' + (agenda.expectedTime- usedTime) % 60}</div>
       <p>{agenda.name}</p>
     </CurrentDiv>
   );

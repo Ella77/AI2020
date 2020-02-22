@@ -35,7 +35,7 @@ const meetingID = () => {
               </span>
             </p>
             <p>
-              {currentMeeting.participants.map((a, index) => {
+              {currentMeeting.detail.talkingRatio.map((a, index) => {
                 return (
                   <p>
                     {
@@ -58,7 +58,7 @@ const meetingID = () => {
             {currentMeeting.participants.map(participant => {
               return <Avatar>{participant.nickname}</Avatar>;
             })}
-            {currentMeeting.agendas.map(agenda => {
+            {currentMeeting.agendas.map((agenda, index) => {
               return (
                 <AgendaContainer
                   key={agenda.id}
@@ -68,6 +68,13 @@ const meetingID = () => {
                   }}
                 >
                   <h1>{agenda.name}</h1>
+                  <span style={{ color: "white" }}>
+                    분위기: {"  "}
+                    {
+                      //@ts-ignore
+                      currentMeeting.detail.agendasDetail[index].max_sentiment
+                    }
+                  </span>
                   <p>예상시간 : {agenda.expectedTime}(분)</p>
                   <p>
                     실제걸린시간 : {millisToMinutesAndSeconds(agenda.usedTime)}{" "}

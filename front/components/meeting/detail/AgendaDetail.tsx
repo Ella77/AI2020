@@ -9,11 +9,11 @@ const AgendaDetail = ({ agenda, currentMeeting }) => {
     <div>
       <h1>{agenda.name}</h1>
       <h1>속기록</h1>
-      {agenda.sentiment.neutral > 5 ? (
+      {agenda.sentiment.neutral > 6 ? (
         <Icon style={{ fontSize: 40 }} type="meh" />
-      ) : agenda.sentiment.positive > 7 ? (
+      ) : agenda.sentiment.positive > 5 ? (
         <Icon style={{ fontSize: 40 }} type="smile" />
-      ) : agenda.sentiment.negative > 7 ? (
+      ) : agenda.sentiment.negative > 5 ? (
         <Icon style={{ fontSize: 40 }} type="frown" />
       ) : (
         <Icon style={{ fontSize: 40 }} type="meh" />
@@ -27,11 +27,15 @@ const AgendaDetail = ({ agenda, currentMeeting }) => {
             })}
             {" : "}
             {record.sentence}
-            <KeywordTitle>Keyword</KeywordTitle>
-            {record.keyPhrases &&
-              record.keyPhrases.map(keyword => (
-                <KeywordDiv>{keyword}</KeywordDiv>
-              ))}
+
+            {record.keyPhrases.length > 0 && (
+              <>
+                <KeywordTitle>keyword</KeywordTitle>
+                {record.keyPhrases.map(keyword => (
+                  <KeywordDiv>{keyword}</KeywordDiv>
+                ))}
+              </>
+            )}
           </Div>
         );
       })}
@@ -41,15 +45,18 @@ const AgendaDetail = ({ agenda, currentMeeting }) => {
 
 const KeywordTitle = styled.h3`
   margin-top: 20px;
+  margin-bottom: 0px;
 `;
 
 const KeywordDiv = styled.div`
   display: inline-block;
   margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 `;
 
 const Div = styled.div`
-  border: 1px solid;
+  border: 1px solid gray;
   margin-top: 0px;
   border-radius: 1rem;
 `;

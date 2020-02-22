@@ -5,9 +5,9 @@ import { Avatar } from "antd";
 const MainProfileScreen = ({ me }) => {
   if (!me) {
     return (
-      <div>
-        <h1>로그인 해주세요!</h1>
-      </div>
+      <Div>
+        <h1>본 서비스는 로그인이 필요합니다</h1>
+      </Div>
     );
   }
   return (
@@ -20,10 +20,10 @@ const MainProfileScreen = ({ me }) => {
 
 const Div = styled.div`
   justify-content: center;
-  margin-top: 300px;
+  margin-top: 400px;
   h1 {
     color: white;
-    font-size: 20px;
+    font-size: 30px;
   }
 `;
 

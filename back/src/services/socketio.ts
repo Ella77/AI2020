@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import socketIo from "socket.io";
 import { jwtVerify } from "../utils/auth";
 import { MeetingModel } from "../model/meeting";
 import { UserModel } from "../model/user";
 import { ObjectId } from "bson";
+
+const text = require('./api/text_analysis.js');
+
 
 export const sendMeetingStateChangeEvent = (io: socketIo.Server, meetingId: string, state: 1 | 2) => {
   io.to(meetingId.toString()).emit('stateChange', 
@@ -100,10 +104,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
     });
 
     socket.use((packet, next) => {
-      console.log(!socketEnterInfo.get(socket.id));
-      console.log(packet[0] !== "enter");
       if (!socketEnterInfo.get(socket.id) && packet[0] !== "enter") {
-        console.log(1);
         next(new Error("Not entered"));
       } else {
         next();
@@ -132,7 +133,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
       socket.broadcast.to(enterInfo![1]).emit("stateChange", data);
     });
 
-    socket.on("talk", data => {
+    socket.on("talk", async (data) => {
       const [userId, meetingId] = socketEnterInfo.get(socket.id)!;
       const lastTalkingInfo = rawTalkings.get(meetingId)!;
       if (!lastTalkingInfo[0]) {
@@ -148,7 +149,12 @@ export const socketEventsInject = (io: socketIo.Server) => {
       } else {
         // 화자가 변경되었을 때
         const lastTalkingInfo = rawTalkings.get(meetingId)!;
-
+        const result = await text.getEntity({
+          documents: [
+            { language: "en", id: "1", text: lastTalkingInfo[1] },
+          ]
+        });
+        console.log(result);
         // TODO lastTalkingInfo[1] 분석
         // TODO Keyword 생성
         rawTalkings.set(meetingId, [userId, data.talking]);

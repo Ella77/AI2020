@@ -14,7 +14,8 @@ import {
   GET_MY_MEETINGS_FAILURE,
   GET_MEETING_REQUEST,
   GET_MEETING_SUCCESS,
-  GET_MEETING_FAILURE
+  GET_MEETING_FAILURE,
+  MEETINGS_CLEAN
 } from "./actions";
 
 const initialState: meetingStore = {
@@ -51,6 +52,11 @@ export default (state = initialState, action) => {
         draft.meeting.currentAgendas = draft.meeting.currentAgendas.filter(
           agenda => agenda.id !== action.payload.id
         );
+        break;
+      }
+      case MEETINGS_CLEAN: {
+        draft.meeting.meetings = null;
+        console.log("clean");
         break;
       }
 

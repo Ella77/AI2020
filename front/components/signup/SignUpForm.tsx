@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Icon, Button } from "antd";
+import { Form, Input, Icon, Button, Card } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { SIGN_UP_REQUEST } from "../../reducers/user/actions";
@@ -55,7 +55,7 @@ const SignUpForm = ({ form }) => {
   };
 
   return (
-    <div>
+    <Card style={{ marginTop: 100, width: 500 }}>
       <Form onSubmit={_onSubmitForm}>
         <Form.Item label="nickname" hasFeedback>
           {form.getFieldDecorator("nickname", {
@@ -132,7 +132,7 @@ const SignUpForm = ({ form }) => {
           회원가입
         </Button>
       </Form>
-    </div>
+    </Card>
   );
 };
 

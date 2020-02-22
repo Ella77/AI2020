@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_REQUEST } from "../../reducers/user/actions";
 import { store } from "../../reducers/indext.type";
 import { useRouter } from "next/router";
-import { Form, Icon, Input, Button } from "antd";
+import { Form, Icon, Input, Button, Card } from "antd";
 
 const LoginForm = () => {
   const [loginId, setLoginId] = useState("");
@@ -31,7 +31,12 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <Card
+      style={{
+        width: 500,
+        marginTop: 100
+      }}
+    >
       <Form onSubmit={_onSubmitForm}>
         <Form.Item>
           <Input
@@ -50,14 +55,16 @@ const LoginForm = () => {
             onChange={e => setPlainPassword(e.target.value)}
           />
         </Form.Item>
-        <Button type="primary" htmlType="submit">
-          로그인
-        </Button>
-        <Link href="/signUp">
-          <a>회원가입</a>
-        </Link>
+        <div style={{ textAlign: "center" }}>
+          <Button type="primary" htmlType="submit">
+            로그인
+          </Button>
+          <Link href="/signUp">
+            <a style={{ marginLeft: 30 }}>회원가입</a>
+          </Link>
+        </div>
       </Form>
-    </div>
+    </Card>
   );
 };
 

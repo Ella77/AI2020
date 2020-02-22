@@ -55,7 +55,7 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
-      currentKeywords: [
+      currentKeywords: [/*
         { name: "test1", type: "a", weight: 1 },
         { name: "test1", type: "a", weight: 2 },
         { name: "test1", type: "a", weight: 3 },
@@ -63,7 +63,7 @@ class STT extends Component<props, state> {
         { name: "test1", type: "a", weight: 1 },
         { name: "test1", type: "a", weight: 1 },
         { name: "test1", type: "a", weight: 1 },
-        { name: "test1", type: "a", weight: 1 }
+        { name: "test1", type: "a", weight: 1 }*/
       ],
       meetingState: 1,
       participants: [],
@@ -239,17 +239,13 @@ class STT extends Component<props, state> {
     return (
       <div>
         <KeywordDiv>
-          {this.state.currentKeywords.slice(5).map((keyword, index) => {
-            return (
-              <div
-                style={{
-                  fontSize: 20 + keyword.length * 2,
-                  left: index * 20
-                }}
-              >
-                {keyword.word}
-              </div>
-            );
+        {this.state.currentKeywords.map((keyword, idx) => {
+            return <div style={{
+              position: 'absolute',
+              fontSize: 30 + keyword.weight * 5,
+              left: 440 + 200 * Math.cos(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95),
+              top: 380 - 200 * Math.sin(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95)
+            }}>{keyword.name}</div>;
           })}
         </KeywordDiv>
         {this.props.currentMeeting.agendas.map((agenda, index) => {
@@ -277,23 +273,6 @@ class STT extends Component<props, state> {
             />
           );
         })}
-        <KeywordDiv2>
-          {this.state.currentKeywords
-            .slice(5 + 1, this.state.currentKeywords.length)
-            .map((keyword, index) => {
-              return (
-                <div
-                  style={{
-                    fontSize: 20 + keyword.length * 2,
-                    left: index * 20
-                  }}
-                >
-                  {keyword.word}
-                </div>
-              );
-            })}
-        </KeywordDiv2>
-
         {this.state.meetingState === 2 && (
           <EndAlarm>
             회의 종료
@@ -331,54 +310,6 @@ class STT extends Component<props, state> {
                     );
                   }) !== -1
                 ) {
-                  console.log(word);
-                  let flag = true;
-                  let len = 0;
-                  let wordIndex = -1;
-                  if (this.state.currentKeywords.length < 1) {
-                    this.setState({
-                      keywordChangeFlag: false,
-                      currentKeywords: [{ word, length: 1 }]
-                    });
-                  } else {
-                    //find length
-                    this.state.caption.split(" ").map(normalWord => {
-                      if (normalWord === word) {
-                        len++;
-                      }
-                    });
-                    this.state.currentKeywords.map((keyword, index) => {
-                      if (keyword.word === word) {
-                        flag = false;
-                        wordIndex = index;
-                      }
-                    });
-                    if (flag) {
-                      this.setState(prev => ({
-                        keywordChangeFlag: false,
-                        currentKeywords: [
-                          ...prev.currentKeywords,
-                          { word, length: 1 }
-                        ]
-                      }));
-                    } else if (wordIndex !== -1) {
-                      this.setState(prev => ({
-                        keywordChangeFlag: false,
-                        currentKeywords: [
-                          ...prev.currentKeywords.slice(0, wordIndex),
-                          {
-                            word: prev.currentKeywords[wordIndex].word,
-                            length: len
-                          },
-                          ...prev.currentKeywords.slice(
-                            wordIndex + 1,
-                            prev.currentKeywords.length
-                          )
-                        ]
-                      }));
-                    }
-                  }
-                  console.log(this.state.currentKeywords);
                   return (
                     <span style={{ fontWeight: "bold" }}>{word + " "}</span>
                   );
@@ -397,17 +328,9 @@ const KeywordDiv = styled.div`
   font-size: 20px;
   color: white;
   display: inline-block;
-  margin-top: 300px;
   position: absolute;
 `;
-const KeywordDiv2 = styled.div`
-  font-size: 20px;
-  color: white;
-  display: inline-block;
-  margin-top: 300px;
-  margin-left:700px
-  position: absolute;
-`;
+
 
 const EndAlarm = styled.h1`
   text-align: center;

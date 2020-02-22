@@ -20,7 +20,16 @@ async function init() {
 }
 init();
 
-async function getSentiment(jsoninput){
+function stringsToJsoninput(strings) {
+    const jsoninput = [];
+    for (let i = 0 ; i < strings.length ; i ++) {
+        jsoninput.push({ language: "en", id: (i + 1).toString(), text: strings[i] },)
+    }
+    return jsoninput;
+}
+
+async function getSentiment(strings){
+    const jsoninput = stringsToJsoninput(strings);
     await init();
 
    // console.log("This will perform sentiment analysis on the sentences.");
@@ -81,7 +90,8 @@ async function getSentiment(jsoninput){
 // // </languageDetection>
 
 // <keyPhraseExtraction>
-async function getKeyphrase(jsoninput){
+async function getKeyphrase(strings){
+    const jsoninput = stringsToJsoninput(strings);
     await init();
 
    // console.log("2. This will extract key phrases from the sentences.");
@@ -115,7 +125,8 @@ async function getKeyphrase(jsoninput){
 
 
 // <entityRecognition>
-async function getEntity(jsoninput){
+async function getEntity(strings){
+    const jsoninput = stringsToJsoninput(strings);
     await init();
 
     //console.log("3. This will perform Entity recognition on the sentences.");

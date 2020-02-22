@@ -159,11 +159,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
       } else {
         // 화자가 변경되었을 때
         const lastTalkingInfo = rawTalkings.get(meetingId)!;
-        const result = await text.getEntity({
-          documents: [
-            { language: "en", id: "1", text: lastTalkingInfo[1] },
-          ]
-        });
+        const result = await text.getEntity([lastTalkingInfo[1]]);
         console.log(result);
         // TODO lastTalkingInfo[1] 분석
         // TODO Keyword 생성

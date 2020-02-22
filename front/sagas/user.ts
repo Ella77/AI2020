@@ -57,10 +57,10 @@ function* login(action) {
       result: result.data
     });
   } catch (error) {
-    console.error(error);
+    console.dir(error);
     yield put({
       type: LOGIN_FAILURE,
-      data: error
+      error: error.response.status
     });
   }
 }

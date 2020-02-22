@@ -54,7 +54,8 @@ class STT extends Component<props, state> {
 
   handle(state) {
     console.log("handle", state);
-    if (state !== 2) {
+    if (state === 1) {
+      this.setState({ state: 1 });
       this.speechConfig = SpeechSDK.SpeechConfig.fromSubscription(
         subscription_key,
         stt_region
@@ -90,18 +91,18 @@ class STT extends Component<props, state> {
         }
       );
     } else {
+      this.setState({ state: 0 });
       this.recognizer.close();
+      this.recognizer = null;
     }
   }
   _onPressAgenda = () => {
     if (this.state.state == 0) {
-      this.setState({ state: 1 });
       axios.put(`/meetings/${this.props.meetingId}/agenda-sequence`, {
         sequenceNumber: this.state.sequenceNumberOfCurrentAgenda
       });
       this.handle(1);
     } else if (this.state.state == 1) {
-      this.setState({ state: 2 });
       axios.put(`/meetings/${this.props.meetingId}/agenda-sequence`, {
         sequenceNumber: this.state.sequenceNumberOfCurrentAgenda + 1
       });
@@ -142,10 +143,21 @@ class STT extends Component<props, state> {
           break;
         }
         case 2: {
-          this.setState(prev => ({
-            sequenceNumberOfCurrentAgenda: data.sequenceNumberOfCurrentAgenda,
-            state: 0
-          }));
+          if (
+            data.sequenceNumberOfCurrentAgenda ===
+            this.state.sequenceNumberOfCurrentAgenda
+          ) {
+            this.setState({ state: 1 });
+            this.handle(1);
+          } else {
+            this.setState({
+              sequenceNumberOfCurrentAgenda: data.sequenceNumberOfCurrentAgenda,
+              state: 0
+            });
+            if (this.recognizer) {
+              this.handle(2);
+            }
+          }
 
           break;
         }
@@ -199,7 +211,7 @@ class STT extends Component<props, state> {
             회의 종료
             <div
               onClick={() => {
-                Router.replace(`meeting/detail/${this.props.meetingId}`);
+                Router.replace(`/meeting/detail/${this.props.meetingId}`);
               }}
             >
               <p>회의 상세페이지로 이동</p>
@@ -229,6 +241,7 @@ const EndAlarm = styled.h1`
   text-align: center;
   font-size: 50px;
   color: white;
+  cursor: pointer;
 `;
 
 const AvatarDiv = styled.div`

@@ -1,17 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SignUpForm from "../components/signup/SignUpForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LOAD_USER_REQUEST } from "../reducers/user/actions";
 import { Row, Col } from "antd";
 import styled from "styled-components";
+import { store } from "../reducers/indext.type";
+import { useRouter } from "next/router";
 
 const signUp = () => {
   const dispatch = useDispatch();
+  const { me } = useSelector((state: store) => state.user);
+  const router = useRouter();
   useEffect(() => {
+    if (me) {
+      router.replace("/");
+    }
+
     dispatch({
       type: LOAD_USER_REQUEST
     });
-  }, []);
+  }, [me]);
   return (
     <Row>
       <Col span={12}>

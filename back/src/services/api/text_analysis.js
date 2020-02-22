@@ -25,7 +25,7 @@ function stringsToJsoninput(strings) {
     for (let i = 0 ; i < strings.length ; i ++) {
         jsoninput.push({ language: "en", id: (i + 1).toString(), text: strings[i] },)
     }
-    return jsoninput;
+    return {documents: jsoninput};
 }
 
 async function getSentiment(strings){
@@ -39,7 +39,6 @@ async function getSentiment(strings){
         multiLanguageBatchInput: jsoninput
     });
     //console.log(sentimentResult.documents);
-    console.log(os.EOL);
     var pos = 0;
     var neu= 0;
     var neg= 0;
@@ -56,7 +55,6 @@ async function getSentiment(strings){
         }
     });
     json.push({positive:pos,negative:neg,neutral:neu});
-    console.log(json);
     return json;
 
 }
@@ -115,8 +113,6 @@ async function getKeyphrase(strings){
     const keyPhraseResult = await textAnalyticsClient.keyPhrases({
         multiLanguageBatchInput: jsoninput
     });
-    console.log(keyPhraseResult.documents);
-    console.log(os.EOL);
     return keyPhraseResult.documents;
 }
 // keyPhraseExtraction();
@@ -168,10 +164,8 @@ async function getEntity(strings){
 
         });
     });
-    console.log(json);
 
-
-    console.log(os.EOL);
+    return json;
 }
 
 //getSentiment(jsoninputs);

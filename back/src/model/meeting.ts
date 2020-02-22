@@ -2,22 +2,25 @@ import mongoose from 'mongoose';
 import { ObjectId } from 'bson';
 import { User } from './user';
 
+
 export type Record = {
   userId: ObjectId | User;
   sentence: string;
+  keyPhrases: string[]
 }
 
-export type Keyword = {
-  word: string;
-  comeup: number;
-}
-
-export type Search = {
+export type Entity = {
   name: string;
   type: string;
-  comeup: number;
-
+  weight: number;
 }
+
+export type Sentiment = {
+  positive: number;
+  negative: number;
+  neutral: number;
+};
+
 export type MeetingState = 0 | 1 | 2 // 0 회의 시작 이전, 1 회의 진행중, 2 회의 종료
 
 export type Agenda = {
@@ -30,8 +33,9 @@ export type Agenda = {
   endDate: Date | null;
   
   records: Record[];
-  keywords: Keyword[];
-  searches : Search[];
+
+  entities: Entity[];
+  sentiment: Sentiment;
 };
 
 export interface Meeting extends mongoose.Document {

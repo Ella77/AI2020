@@ -6,16 +6,17 @@ import { UserModel } from "../model/user";
 import { ObjectId } from "bson";
 import * as _ from "lodash";
 
-const text = require('./api/text_analysis.js');
+const text = require("./api/text_analysis.js");
 
-
-export const sendMeetingStateChangeEvent = (io: socketIo.Server, meetingId: string, state: 1 | 2) => {
-  io.to(meetingId.toString()).emit('stateChange', 
-    {
-      type: 1, // 회의 상태 변경
-      state
-    }
-  );
+export const sendMeetingStateChangeEvent = (
+  io: socketIo.Server,
+  meetingId: string,
+  state: 1 | 2
+) => {
+  io.to(meetingId.toString()).emit("stateChange", {
+    type: 1, // 회의 상태 변경
+    state
+  });
 };
 
 export const sendCurrentAgendaChangeEvnet = (
@@ -51,36 +52,44 @@ const sendKeywordAddEvent = (
   });
 };
 
-type Entity = {name: string; type: string};
-type Sentiment = {positive: number; negative: number; neutral: number};
-type KeyPhrase = {id: number; keyPhrases: string[]};
+type Entity = { name: string; type: string };
+type Sentiment = { positive: number; negative: number; neutral: number };
+type KeyPhrase = { id: number; keyPhrases: string[] };
 
-const saveRecordAndAnalysis = async (meetingId: string, entities: Entity[], sentiment: Sentiment, record: Record) => {
+const saveRecordAndAnalysis = async (
+  meetingId: string,
+  entities: Entity[],
+  sentiment: Sentiment,
+  record: Record
+) => {
   const meeting = await MeetingModel.findById(meetingId);
   if (!meeting) {
     return null;
   }
   const sequenceNumber = meeting.sequenceNumberOfCurrentAgenda;
   const newAgendas = _.cloneDeep(meeting.agendas);
-  const {oldPositive, oldNegative, oldNeutral} = {
+  const { oldPositive, oldNegative, oldNeutral } = {
     oldPositive: newAgendas[sequenceNumber].sentiment?.positive || 0,
     oldNegative: newAgendas[sequenceNumber].sentiment?.negative || 0,
-    oldNeutral: newAgendas[sequenceNumber].sentiment?.neutral || 0,
+    oldNeutral: newAgendas[sequenceNumber].sentiment?.neutral || 0
   };
   newAgendas[sequenceNumber].sentiment = {
     positive: oldPositive + sentiment.positive,
     negative: oldNegative + sentiment.negative,
-    neutral: oldNeutral + sentiment.neutral,
+    neutral: oldNeutral + sentiment.neutral
   };
-  for (let i = 0 ; i < entities.length ; i ++) {
+  for (let i = 0; i < entities.length; i++) {
     if (!newAgendas[sequenceNumber].entities) {
       newAgendas[sequenceNumber].entities = [];
     }
-    const idx = newAgendas[sequenceNumber].entities.findIndex((entity) => entity.name === entities[i].name);
+    const idx = newAgendas[sequenceNumber].entities.findIndex(
+      entity => entity.name === entities[i].name
+    );
     if (idx !== -1) {
-      newAgendas[sequenceNumber].entities[idx].weight = newAgendas[sequenceNumber].entities[idx].weight + 1;
+      newAgendas[sequenceNumber].entities[idx].weight =
+        newAgendas[sequenceNumber].entities[idx].weight + 1;
     } else {
-      newAgendas[sequenceNumber].entities.push({...entities[i], weight: 1});
+      newAgendas[sequenceNumber].entities.push({ ...entities[i], weight: 1 });
     }
   }
   newAgendas[sequenceNumber].records.push(record);
@@ -88,7 +97,6 @@ const saveRecordAndAnalysis = async (meetingId: string, entities: Entity[], sent
   meeting.agendas = newAgendas;
   await meeting.save();
 };
-
 
 export const socketEventsInject = (io: socketIo.Server) => {
   type socketId = string;
@@ -179,7 +187,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
       socket.broadcast.to(enterInfo![1]).emit("stateChange", data);
     });
 
-    socket.on("talk", async (data) => {
+    socket.on("talk", async data => {
       const [userId, meetingId] = socketEnterInfo.get(socket.id)!;
       console.log("aaaa");
       console.log(userId, meetingId);
@@ -198,20 +206,26 @@ export const socketEventsInject = (io: socketIo.Server) => {
         const newTalking = lastTalkingInfo[1] + " " + data.talking;
         rawTalkings.set(meetingId, [userId, newTalking]);
         console.log(await text.getKeyphrase([newTalking]));
-        console.log(typeof await text.getKeyphrase([newTalking]));
-        io.to(meetingId).emit("talk", { speaker: userId, talking: newTalking,
+        console.log(typeof (await text.getKeyphrase([newTalking])));
+        io.to(meetingId).emit("talk", {
+          speaker: userId,
+          talking: newTalking,
           emphasize: (await text.getKeyphrase([newTalking]))?.[0].keyPhrases
         });
       } else {
         // 화자가 변경되었을 때
         const lastTalkingInfo = rawTalkings.get(meetingId)!;
         const entity: Entity[] = await text.getEntity([lastTalkingInfo[1]]);
-        const sentiment: Sentiment[] = await text.getSentiment([lastTalkingInfo[1]]);
-        const keyword: KeyPhrase[] = await text.getKeyphrase([lastTalkingInfo[1]]);
+        const sentiment: Sentiment[] = await text.getSentiment([
+          lastTalkingInfo[1]
+        ]);
+        const keyword: KeyPhrase[] = await text.getKeyphrase([
+          lastTalkingInfo[1]
+        ]);
         console.log(entity);
         console.log(sentiment);
         console.log(keyword);
-        for (let i = 0 ; i < entity.length ; i ++) {
+        for (let i = 0; i < entity.length; i++) {
           sendKeywordAddEvent(io, meetingId, entity[i].name);
         }
         const record: Record = {
@@ -225,7 +239,8 @@ export const socketEventsInject = (io: socketIo.Server) => {
         io.to(meetingId).emit("talk", {
           speaker: userId,
           talking: data.talking,
-          emphasize: (await text.getKeyphrase([lastTalkingInfo[1]]))?.[0].keyPhrases
+          emphasize: (await text.getKeyphrase([lastTalkingInfo[1]]))?.[0]
+            .keyPhrases
         });
       }
     });

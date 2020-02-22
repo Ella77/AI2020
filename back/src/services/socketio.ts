@@ -44,11 +44,11 @@ const sendOnlineUsersChangeEvent = (
 const sendKeywordAddEvent = (
   io: socketIo.Server,
   meetingId: string,
-  keywordToAdd: string
+  entity: Entity
 ) => {
   io.to(meetingId.toString()).emit("stateChange", {
     type: 4, // 키워드 추가
-    keywordToAdd
+    entity
   });
 };
 
@@ -154,10 +154,12 @@ export const socketEventsInject = (io: socketIo.Server) => {
       socketEnterInfo.set(socket.id, [user._id.toString(), meetingId]);
       sendOnlineUsersChangeEvent(io, meetingId, onlineUsers.get(meetingId)!);
 
+      console.log(`user ${user._id.toString()} has entered`);
       socket.emit("enter", { success: true });
     });
 
     socket.use((packet, next) => {
+      console.log("net entered");
       if (!socketEnterInfo.get(socket.id) && packet[0] !== "enter") {
         next(new Error("Not entered"));
       } else {
@@ -188,6 +190,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
     });
 
     socket.on("talk", async data => {
+      console.log(123);
       const [userId, meetingId] = socketEnterInfo.get(socket.id)!;
       console.log("aaaa");
       console.log(userId, meetingId);
@@ -226,7 +229,7 @@ export const socketEventsInject = (io: socketIo.Server) => {
         console.log(sentiment);
         console.log(keyword);
         for (let i = 0; i < entity.length; i++) {
-          sendKeywordAddEvent(io, meetingId, entity[i].name);
+          sendKeywordAddEvent(io, meetingId, entity[i]);
         }
         const record: Record = {
           userId: new ObjectId(lastTalkingInfo[0]),

@@ -55,7 +55,7 @@ export const getAgendaDetail = async (agenda: Agenda) => {
   //모든 record의 sentence를 더한다.
   const wholesentence = concatstring(agenda.records);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const summarize = require('./summarization.js');
+  const summarize = require('./api/summarization.js');
   const summarized = summarize.getSummarize(wholesentence);
 
 
@@ -75,7 +75,7 @@ export const getAgendaDetail = async (agenda: Agenda) => {
   }
 
   const dict = {
-    name, 
+    name: agenda.name, 
     summarized,
     max_sentiment,
     entities
@@ -128,7 +128,7 @@ export const getEntireDetail = async (meetingId: ObjectId) => {
   } else if (entireSentiment.neutral > entireSentiment.positive && entireSentiment.neutral > entireSentiment.negative) {
     max_sentiment = 'neutral';
   }
-  let allCount: number = 0;
+  let allCount = 0;
   const talkingRank: {userId: string; nickname: string; count: number }[] = [];
   for (let i = 0 ; i < meeting.agendas.length ; i ++) {
     for (let j = 0 ; j < meeting.agendas[i].records.length ; j ++) {

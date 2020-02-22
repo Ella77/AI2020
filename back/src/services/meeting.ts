@@ -140,6 +140,7 @@ export const updateSequenceNumber = async (
     return 1;
   }
 
+  console.log(sequenceNumberBeforeUpdate);
   newAgendas[sequenceNumberBeforeUpdate] = {
     ...newAgendas[sequenceNumberBeforeUpdate],
     usedTime:

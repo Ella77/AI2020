@@ -35,7 +35,7 @@ const meetingID = () => {
               </span>
             </p>
             <p>
-              {currentMeeting.participants.map((a, index) => {
+              {currentMeeting.detail.talkingRatio.map((a, index) => {
                 return (
                   <p>
                     {

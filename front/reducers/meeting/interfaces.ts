@@ -34,6 +34,7 @@ type participant = {
 };
 
 export interface currentMeeting {
+  detail?: any;
   sequenceNumberOfCurrentAgenda: number;
   agendas: agenda[];
   participants: participant[];

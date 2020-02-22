@@ -7,6 +7,7 @@ import {
 } from "./socketio";
 import { io } from "../../bin/www";
 import * as _ from "lodash";
+import {getEntireDetail} from './analyze'
 
 /**
  * @description 이름과 안건들을 받아서 미팅 도큐먼트를 생성해 리턴함
@@ -155,8 +156,10 @@ export const updateSequenceNumber = async (
 
     meeting.agendas = newAgendas;
     await meeting.save();
-
     sendMeetingStateChangeEvent(io, meetingId.toString(), 2);
+    await MeetingModel.findByIdAndUpdate(meeting._id, {
+      detail: await getEntireDetail(meeting._id)
+    })
     return 2;
   }
 

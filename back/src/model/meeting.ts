@@ -44,6 +44,7 @@ export interface Meeting extends mongoose.Document {
   agendas: Agenda[];
   participants: ObjectId[] | User[];
   state: MeetingState;
+  detail: any;
 }
 
 const schema = new mongoose.Schema({
@@ -68,7 +69,10 @@ const schema = new mongoose.Schema({
   state: {
     default: 0,
     type: Number
-  }
+  },
+  detail: {
+    type: mongoose.Schema.Types.Mixed
+  },
 }, {
   timestamps: true
 });

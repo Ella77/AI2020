@@ -12,6 +12,7 @@ const MeetingID = () => {
   useEffect(() => {
     if (flag && !me) {
       router.back();
+      alert("로그인이 필요합니다");
     }
     setFlag(true);
   }, [me]);

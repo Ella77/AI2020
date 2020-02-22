@@ -4,14 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_REQUEST } from "../../reducers/user/actions";
 import { store } from "../../reducers/indext.type";
 import { useRouter } from "next/router";
-import { Form, Icon, Input, Button, Card } from "antd";
+import { Form, Icon, Input, Button, Card, Spin } from "antd";
+import styled from "styled-components";
 
 const LoginForm = () => {
   const [loginId, setLoginId] = useState("");
   const [plainPassword, setPlainPassword] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
-  const { me } = useSelector((state: store) => state.user);
+  const { me, loadingStates, metaStates } = useSelector(
+    (state: store) => state.user
+  );
 
   useEffect(() => {
     if (me) {
@@ -56,16 +59,30 @@ const LoginForm = () => {
           />
         </Form.Item>
         <div style={{ textAlign: "center" }}>
-          <Button type="primary" htmlType="submit">
-            로그인
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={loadingStates.isLoging}
+          >
+            {loadingStates.isLoging ? <Spin /> : "로그인"}
           </Button>
+
           <Link href="/signUp">
             <a style={{ marginLeft: 30 }}>회원가입</a>
           </Link>
         </div>
+        {metaStates.loginStatusCode === 403 && (
+          <Error>아이디나 비밀번호를 확인해주세요</Error>
+        )}
       </Form>
     </Card>
   );
 };
+const Error = styled.p`
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 1em;
+  color: red;
+`;
 
 export default LoginForm;

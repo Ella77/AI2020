@@ -23,7 +23,7 @@ const initialState: userStore = {
   },
   metaStates: {
     isLoggedIn: false,
-    loginStautsCode: 0,
+    loginStatusCode: 0,
     signUpStatusCode: 0
   }
 };
@@ -55,11 +55,13 @@ export default (state = initialState, action: userActions) => {
       case LOGIN_SUCCESS: {
         draft.loadingStates.isLoging = false;
         draft.me = action.result.user;
+        draft.metaStates.loginStatusCode = 200;
         localStorage.setItem("user", JSON.stringify(action.result.user));
         break;
       }
       case LOGIN_FAILURE: {
         draft.loadingStates.isLoging = false;
+        draft.metaStates.loginStatusCode = action.error;
         break;
       }
 

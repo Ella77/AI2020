@@ -34,7 +34,7 @@ export interface loadingStates {
 /* meta states */
 export interface metaStates {
   isLoggedIn: boolean;
-  loginStautsCode: number;
+  loginStatusCode: number;
   signUpStatusCode: number;
 }
 
@@ -56,7 +56,7 @@ export interface loginSuccessAction {
 }
 export interface loginFailureAction {
   type: typeof LOGIN_FAILURE;
-  errorCode: number;
+  error: number;
 }
 
 /* 회원가입 행위들 */

@@ -25,7 +25,7 @@ const list = () => {
         }
       });
     }
-  }, []);
+  }, [meetings]);
 
   return (
     <>

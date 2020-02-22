@@ -25,8 +25,8 @@ type props = {
 type Keyword = {
   name: string;
   type: string;
-  weight: number;  
-}
+  weight: number;
+};
 type state = {
   text: string;
   caption: string;
@@ -35,7 +35,8 @@ type state = {
   state: number;
   participants: any;
   meetingState: number;
-  currentKeywords: Keyword[];
+  currentKeywords: any;
+  keywordChangeFlag: boolean;
 };
 
 class STT extends Component<props, state> {
@@ -44,6 +45,7 @@ class STT extends Component<props, state> {
   recognizer: SpeechRecognizer;
   speechConfig: SpeechConfig;
   audioConfig: AudioConfig;
+
   constructor(props) {
     super(props);
 
@@ -53,9 +55,19 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
-      currentKeywords: [{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 2},{name: 'test1', type: 'a', weight: 3},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1}],
+      currentKeywords: [
+        { name: "test1", type: "a", weight: 1 },
+        { name: "test1", type: "a", weight: 2 },
+        { name: "test1", type: "a", weight: 3 },
+        { name: "test1", type: "a", weight: 1 },
+        { name: "test1", type: "a", weight: 1 },
+        { name: "test1", type: "a", weight: 1 },
+        { name: "test1", type: "a", weight: 1 },
+        { name: "test1", type: "a", weight: 1 }
+      ],
       meetingState: 1,
-      participants: []
+      participants: [],
+      keywordChangeFlag: false
     };
     this.textRef = createRef();
     this.handle = this.handle.bind(this);
@@ -142,7 +154,7 @@ class STT extends Component<props, state> {
 
     this.props.socket.on("talk", data => {
       console.log("talk", data);
-      this.setState({ caption: data.talking });
+      this.setState({ caption: data.talking, keywordChangeFlag: true });
       this.setState({ emphasize: data.emphasize });
       this.setState({ state: 1 });
       if (!this.recognizer) {
@@ -181,24 +193,35 @@ class STT extends Component<props, state> {
           break;
         }
         case 4: {
-          console.log('keyword got');
-          const newKeyword: {name: string, type: string} = data.entity;
+          console.log("keyword got");
+          const newKeyword: { name: string; type: string } = data.entity;
           if (!newKeyword) {
             break;
           }
-          const existIdx = this.state.currentKeywords.findIndex((keyword) => {
-            keyword.name === newKeyword.name
+          const existIdx = this.state.currentKeywords.findIndex(keyword => {
+            keyword.name === newKeyword.name;
           });
-          if ( existIdx === -1) { // 처음
-            this.setState({currentKeywords: [...this.state.currentKeywords, {...newKeyword, weight: 1}]});
-          } else { // 중복
-            this.setState({currentKeywords: this.state.currentKeywords.map((keyword, idx) => {
-              if (idx === existIdx) {
-                return {...keyword, weight: keyword.weight + 1}
-              } else {
-                return keyword;
-              }
-            })});
+          if (existIdx === -1) {
+            // 처음
+            this.setState({
+              currentKeywords: [
+                ...this.state.currentKeywords,
+                { ...newKeyword, weight: 1 }
+              ]
+            });
+          } else {
+            // 중복
+            this.setState({
+              currentKeywords: this.state.currentKeywords.map(
+                (keyword, idx) => {
+                  if (idx === existIdx) {
+                    return { ...keyword, weight: keyword.weight + 1 };
+                  } else {
+                    return keyword;
+                  }
+                }
+              )
+            });
           }
           break;
         }
@@ -216,13 +239,17 @@ class STT extends Component<props, state> {
     return (
       <div>
         <KeywordDiv>
-          {this.state.currentKeywords.map((keyword, idx) => {
-            return <div style={{
-              position: 'absolute',
-              fontSize: 30 + keyword.weight * 5,
-              left: 440 + 200 * Math.cos(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95),
-              top: 380 - 200 * Math.sin(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95)
-            }}>{keyword.name}</div>;
+          {this.state.currentKeywords.slice(5).map((keyword, index) => {
+            return (
+              <div
+                style={{
+                  fontSize: 20 + keyword.length * 2,
+                  left: index * 20
+                }}
+              >
+                {keyword.word}
+              </div>
+            );
           })}
         </KeywordDiv>
         {this.props.currentMeeting.agendas.map((agenda, index) => {
@@ -250,6 +277,22 @@ class STT extends Component<props, state> {
             />
           );
         })}
+        <KeywordDiv2>
+          {this.state.currentKeywords
+            .slice(5 + 1, this.state.currentKeywords.length)
+            .map((keyword, index) => {
+              return (
+                <div
+                  style={{
+                    fontSize: 20 + keyword.length * 2,
+                    left: index * 20
+                  }}
+                >
+                  {keyword.word}
+                </div>
+              );
+            })}
+        </KeywordDiv2>
 
         {this.state.meetingState === 2 && (
           <EndAlarm>
@@ -278,20 +321,71 @@ class STT extends Component<props, state> {
         <CaptionDiv id="warning">
           <p>
             caption:
-            {this.state.caption.split(" ").map(word => {
-              if (
-                this.state.emphasize.findIndex(emphasizeWord => {
+            {this.state.keywordChangeFlag &&
+              this.state.caption.split(" ").map(word => {
+                if (
+                  this.state.emphasize.findIndex(emphasizeWord => {
+                    return (
+                      emphasizeWord === word ||
+                      emphasizeWord === word.slice(0, word.length - 1)
+                    );
+                  }) !== -1
+                ) {
+                  console.log(word);
+                  let flag = true;
+                  let len = 0;
+                  let wordIndex = -1;
+                  if (this.state.currentKeywords.length < 1) {
+                    this.setState({
+                      keywordChangeFlag: false,
+                      currentKeywords: [{ word, length: 1 }]
+                    });
+                  } else {
+                    //find length
+                    this.state.caption.split(" ").map(normalWord => {
+                      if (normalWord === word) {
+                        len++;
+                      }
+                    });
+                    this.state.currentKeywords.map((keyword, index) => {
+                      if (keyword.word === word) {
+                        flag = false;
+                        wordIndex = index;
+                      }
+                    });
+                    if (flag) {
+                      this.setState(prev => ({
+                        keywordChangeFlag: false,
+                        currentKeywords: [
+                          ...prev.currentKeywords,
+                          { word, length: 1 }
+                        ]
+                      }));
+                    } else if (wordIndex !== -1) {
+                      this.setState(prev => ({
+                        keywordChangeFlag: false,
+                        currentKeywords: [
+                          ...prev.currentKeywords.slice(0, wordIndex),
+                          {
+                            word: prev.currentKeywords[wordIndex].word,
+                            length: len
+                          },
+                          ...prev.currentKeywords.slice(
+                            wordIndex + 1,
+                            prev.currentKeywords.length
+                          )
+                        ]
+                      }));
+                    }
+                  }
+                  console.log(this.state.currentKeywords);
                   return (
-                    emphasizeWord === word ||
-                    emphasizeWord === word.slice(0, word.length - 1)
+                    <span style={{ fontWeight: "bold" }}>{word + " "}</span>
                   );
-                }) !== -1
-              ) {
-                return <span style={{ fontWeight: "bold" }}>{word + " "}</span>;
-              } else {
-                return <span>{word + " "}</span>;
-              }
-            })}
+                } else {
+                  return <span>{word + " "}</span>;
+                }
+              })}
           </p>
         </CaptionDiv>
       </div>
@@ -303,6 +397,15 @@ const KeywordDiv = styled.div`
   font-size: 20px;
   color: white;
   display: inline-block;
+  margin-top: 300px;
+  position: absolute;
+`;
+const KeywordDiv2 = styled.div`
+  font-size: 20px;
+  color: white;
+  display: inline-block;
+  margin-top: 300px;
+  margin-left:700px
   position: absolute;
 `;
 

@@ -5,6 +5,7 @@ import { store } from "../reducers/indext.type";
 import { LOGOUT, LOAD_USER_REQUEST } from "../reducers/user/actions";
 import { Icon, Avatar } from "antd";
 import styled from "styled-components";
+import { MEETINGS_CLEAN } from "../reducers/meeting/actions";
 
 const MyfontSize = 40;
 
@@ -35,7 +36,11 @@ const Header = () => {
         </ul>
         {me ? (
           <>
-            <ul>
+            <ul
+              onClick={() => {
+                dispatch({ type: MEETINGS_CLEAN });
+              }}
+            >
               <Link href="/meeting/list">
                 <a>
                   <Icon style={{ fontSize: MyfontSize }} type="video-camera" />
@@ -49,27 +54,20 @@ const Header = () => {
                 </a>
               </Link>
             </ul>
-            <ul>
-              <Link href="/profile">
-                <a>
-                  <Avatar size={MyfontSize}>{me.nickname}</Avatar>
-                </a>
-              </Link>
-            </ul>
           </>
         ) : (
           <>
             <ul>
               <Link href="/login">
                 <a>
-                  <Icon style={{ fontSize: 30 }} type="login" />
+                  <Icon style={{ fontSize: MyfontSize }} type="login" />
                 </a>
               </Link>
             </ul>
             <ul>
               <Link href="/signUp">
                 <a>
-                  <Icon style={{ fontSize: 30 }} type="enter" />
+                  <Icon style={{ fontSize: MyfontSize }} type="enter" />
                 </a>
               </Link>
             </ul>

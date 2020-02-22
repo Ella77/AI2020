@@ -22,6 +22,11 @@ type props = {
   currentMeeting: currentMeeting;
   handleCallP2P: Function;
 };
+type Keyword = {
+  name: string;
+  type: string;
+  weight: number;  
+}
 type state = {
   text: string;
   caption: string;
@@ -30,7 +35,7 @@ type state = {
   state: number;
   participants: any;
   meetingState: number;
-  currentKeywords: any;
+  currentKeywords: Keyword[];
 };
 
 class STT extends Component<props, state> {
@@ -48,7 +53,7 @@ class STT extends Component<props, state> {
       emphasize: [],
       sequenceNumberOfCurrentAgenda: 0,
       state: 0,
-      currentKeywords: [],
+      currentKeywords: [{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 2},{name: 'test1', type: 'a', weight: 3},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1},{name: 'test1', type: 'a', weight: 1}],
       meetingState: 1,
       participants: []
     };
@@ -176,6 +181,25 @@ class STT extends Component<props, state> {
           break;
         }
         case 4: {
+          console.log('keyword got');
+          const newKeyword: {name: string, type: string} = data.entity;
+          if (!newKeyword) {
+            break;
+          }
+          const existIdx = this.state.currentKeywords.findIndex((keyword) => {
+            keyword.name === newKeyword.name
+          });
+          if ( existIdx === -1) { // 처음
+            this.setState({currentKeywords: [...this.state.currentKeywords, {...newKeyword, weight: 1}]});
+          } else { // 중복
+            this.setState({currentKeywords: this.state.currentKeywords.map((keyword, idx) => {
+              if (idx === existIdx) {
+                return {...keyword, weight: keyword.weight + 1}
+              } else {
+                return keyword;
+              }
+            })});
+          }
           break;
         }
       }
@@ -192,8 +216,13 @@ class STT extends Component<props, state> {
     return (
       <div>
         <KeywordDiv>
-          {this.state.currentKeywords.map(keyword => {
-            return <div>{keyword}</div>;
+          {this.state.currentKeywords.map((keyword, idx) => {
+            return <div style={{
+              position: 'absolute',
+              fontSize: 30 + keyword.weight * 5,
+              left: 440 + 200 * Math.cos(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95),
+              top: 380 - 200 * Math.sin(Math.PI / 3 * idx) * (Math.floor(idx / 6 + 1) * 0.5 + 0.7) * (Math.random() * 0.1 + 0.95)
+            }}>{keyword.name}</div>;
           })}
         </KeywordDiv>
         {this.props.currentMeeting.agendas.map((agenda, index) => {
@@ -258,22 +287,6 @@ class STT extends Component<props, state> {
                   );
                 }) !== -1
               ) {
-                console.log(word);
-                let flag = true;
-                if (this.state.currentKeywords.length < 1) {
-                  this.setState({ currentKeywords: [word] });
-                } else {
-                  this.state.currentKeywords.map(keyword => {
-                    if (keyword === word) {
-                      flag = false;
-                    }
-                  });
-                  if (flag)
-                    this.setState(prev => ({
-                      currentKeywords: [...prev.currentKeywords, word]
-                    }));
-                }
-                console.log(this.state.currentKeywords);
                 return <span style={{ fontWeight: "bold" }}>{word + " "}</span>;
               } else {
                 return <span>{word + " "}</span>;
@@ -290,7 +303,6 @@ const KeywordDiv = styled.div`
   font-size: 20px;
   color: white;
   display: inline-block;
-  margin-top: 400px;
   position: absolute;
 `;
 

@@ -1,5 +1,4 @@
 import React, { Component, createRef } from "react";
-import Head from "next/head";
 import { subscription_key } from "../../../../key";
 import { stt_region } from "../../../../config/api";
 import * as SpeechSDK from "microsoft-cognitiveservices-speech-sdk";
@@ -14,17 +13,22 @@ import { currentMeeting } from "../../../../reducers/meeting/interfaces";
 import { Avatar } from "antd";
 import CurrentAgenda from "./CurrentAgenda";
 import OtherAgenda from "./OtherAgenda";
+import styled from "styled-components";
+import Router from "next/router";
 
 type props = {
   socket: any;
   meetingId: string;
   currentMeeting: currentMeeting;
+  handleCallP2P: Function;
 };
 type state = {
   text: string;
   caption: string;
   sequenceNumberOfCurrentAgenda: number;
   state: number;
+  participants: any;
+  meetingState: number;
 };
 
 class STT extends Component<props, state> {
@@ -40,13 +44,16 @@ class STT extends Component<props, state> {
       text: "",
       caption: "",
       sequenceNumberOfCurrentAgenda: 0,
-      state: 0
+      state: 0,
+      meetingState: 1,
+      participants: []
     };
     this.textRef = createRef();
     this.handle = this.handle.bind(this);
   }
 
   handle(state) {
+    console.log("handle", state);
     if (state !== 2) {
       this.speechConfig = SpeechSDK.SpeechConfig.fromSubscription(
         subscription_key,
@@ -82,6 +89,8 @@ class STT extends Component<props, state> {
           this.recognizer.close();
         }
       );
+    } else {
+      this.recognizer.close();
     }
   }
   _onPressAgenda = () => {
@@ -98,10 +107,9 @@ class STT extends Component<props, state> {
       });
       this.handle(2);
     } else {
-      this.setState({ state: 1 });
+      this.setState({ state: 0 });
     }
   };
-
   componentDidMount() {
     // enter the room
     // REST API
@@ -124,21 +132,25 @@ class STT extends Component<props, state> {
     this.props.socket.on("talk", data => {
       console.log("talk", data);
       this.setState({ caption: data.talking });
+      this.setState({ state: 1 });
     });
     this.props.socket.on("stateChange", data => {
       console.log(data);
       switch (data.type) {
         case 1: {
-          this.setState({ state: data.state });
+          this.setState({ meetingState: data.state });
           break;
         }
         case 2: {
-          this.setState({
-            sequenceNumberOfCurrentAgenda: data.sequenceNumberOfCurrentAgenda
-          });
+          this.setState(prev => ({
+            sequenceNumberOfCurrentAgenda: data.sequenceNumberOfCurrentAgenda,
+            state: 0
+          }));
+
           break;
         }
         case 3: {
+          this.props.handleCallP2P();
           break;
         }
         case 4: {
@@ -147,36 +159,24 @@ class STT extends Component<props, state> {
       }
     });
     this.setState({
-      state: this.props.currentMeeting.state,
+      meetingState: this.props.currentMeeting.state,
       sequenceNumberOfCurrentAgenda: this.props.currentMeeting
-        .sequenceNumberOfCurrentAgenda
+        .sequenceNumberOfCurrentAgenda,
+      participants: this.props.currentMeeting.participants
     });
   }
-
-  MeetingState = state => {
-    if (state === 1) {
-      return <h1>회의 시작</h1>;
-    } else if (state === 2) {
-      <h2>회의 종료</h2>;
-    }
-    return null;
-  };
 
   render() {
     return (
       <div>
-        {this.props.currentMeeting.participants.map(participant => {
-          <Avatar size={30}>{participant.nickname}</Avatar>;
-        })}
-        {this.state.state === 1 ? (
-          <h1>회의 시작</h1>
-        ) : (
-          this.state.state === 2 && <h2>회의 종료</h2>
-        )}
         {this.props.currentMeeting.agendas.map((agenda, index) => {
-          if (index == this.state.sequenceNumberOfCurrentAgenda) {
+          if (
+            index == this.state.sequenceNumberOfCurrentAgenda ||
+            this.state.meetingState === 2
+          ) {
             return (
               <CurrentAgenda
+                state={this.state.state}
                 key={agenda.id}
                 agenda={agenda}
                 onPress={this._onPressAgenda}
@@ -187,17 +187,69 @@ class STT extends Component<props, state> {
             <OtherAgenda
               key={agenda.id}
               agenda={agenda}
-              sequenceNumberOfCurrentAgenda={index}
+              index={index}
+              sequenceNumberOfCurrentAgenda={
+                this.state.sequenceNumberOfCurrentAgenda
+              }
             />
           );
         })}
-        <div id="warning">
+        {this.state.meetingState === 2 && (
+          <EndAlarm>
+            회의 종료
+            <div
+              onClick={() => {
+                Router.replace(`meeting/detail/${this.props.meetingId}`);
+              }}
+            >
+              <p>회의 상세페이지로 이동</p>
+            </div>
+          </EndAlarm>
+        )}
+        <AvatarDiv>
+          {this.state.participants.map(participant => (
+            <Avatar
+              style={{ marginBottom: 20, marginRight: 10 }}
+              key={participant._id}
+              size={100}
+            >
+              {participant.nickname}
+            </Avatar>
+          ))}
+        </AvatarDiv>
+        <CaptionDiv id="warning">
           <p>caption: {this.state.caption}</p>
-          <p>text:{this.state.text}</p>
-        </div>
+        </CaptionDiv>
       </div>
     );
   }
 }
+
+const EndAlarm = styled.h1`
+  text-align: center;
+  font-size: 50px;
+  color: white;
+`;
+
+const AvatarDiv = styled.div`
+  position: absolute;
+  bottom: 100px;
+  right: 0;
+  display: inline-block;
+`;
+
+const CaptionDiv = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  width: 100%;
+  opacity: 0.7;
+  background-color: #000000;
+  p {
+    color: white;
+    text-align: center;
+    font-size: 15px;
+  }
+`;
 
 export default STT;

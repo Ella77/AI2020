@@ -25,3 +25,10 @@ export function getFormatDate(date) {
   day = day >= 10 ? day : "0" + day; //day 두자리로 저장
   return year + "";
 }
+
+export function millisToMinutesAndSeconds(millis: number) {
+  var minutes = Math.floor(millis / 60);
+  var seconds = (millis % 60).toFixed(0);
+  //@ts-ignore
+  return minutes + "분:" + (seconds < 10 ? "0" : "") + seconds + "초";
+}

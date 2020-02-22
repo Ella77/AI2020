@@ -30,10 +30,12 @@ const initialState: meetingStore = {
       sequenceNumberOfCurrentAgenda: null,
       state: null
     },
+    lastPage: 1,
     currentAgendas: []
   },
   loadingStates: {
-    isCreatingMeeting: false
+    isCreatingMeeting: false,
+    isGetMeetings: false
   },
   metaStates: {}
 };
@@ -66,13 +68,17 @@ export default (state = initialState, action) => {
       }
 
       case GET_MEETINGS_REQUEST: {
+        draft.loadingStates.isGetMeetings = true;
         break;
       }
       case GET_MEETINGS_SUCCESS: {
-        draft.meeting.meetings = action.result;
+        draft.loadingStates.isGetMeetings = false;
+        draft.meeting.meetings = action.result.result;
+        draft.meeting.lastPage = action.result.lastPage;
         break;
       }
       case GET_MEETINGS_FAILURE: {
+        draft.loadingStates.isGetMeetings = false;
         break;
       }
 

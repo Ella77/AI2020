@@ -19,6 +19,7 @@ type meeting = {
 /* 로딩 상태 */
 export interface loadingStates {
   isCreatingMeeting: boolean;
+  isGetMeetings: boolean;
 }
 
 /* meta states */
@@ -45,9 +46,10 @@ export interface currentMeeting {
 
 export interface meetingStore {
   meeting: {
-    meetings: meeting[] | null;
+    meetings: currentMeeting[] | null;
     currentMeeting: currentMeeting | null;
     currentAgendas: agenda[] | null;
+    lastPage: number;
   };
   metaStates: metaStates;
   loadingStates: loadingStates;

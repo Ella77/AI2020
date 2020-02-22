@@ -27,10 +27,23 @@ const meeting = () => {
   }, [me]);
 
   if (!me) {
-    return <div></div>;
+    return <h1>로그인이 필요합니다</h1>;
   }
 
-  return <MeetingCreateForm />;
+  return (
+    <>
+      <H1>미팅 생성</H1>
+      <MeetingCreateForm me={me} />
+    </>
+  );
 };
+
+const H1 = styled.h1`
+  color: white;
+  font-size: 43px;
+  margin-top: 60px;
+  /* margin-left: 60px; */
+  text-align: center;
+`;
 
 export default meeting;

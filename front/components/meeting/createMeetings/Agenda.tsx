@@ -39,6 +39,8 @@ const AgendaDiv = styled.div`
   border-radius: 1rem;
   margin: 10px;
   text-align: center;
+  display: inline-block;
+  min-width: 200px;
 `;
 
 export default Agenda;

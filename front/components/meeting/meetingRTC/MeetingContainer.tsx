@@ -27,11 +27,10 @@ const MeetingContainer = ({ meetingId }) => {
       <p></p>
       {isNotFirst && (
         <>
-          <AudioP2P socket={socket} />
-          <STT
+          <AudioP2P
             socket={socket}
-            meetingId={meetingId}
             currentMeeting={currentMeeting}
+            meetingId={meetingId}
           />
         </>
       )}

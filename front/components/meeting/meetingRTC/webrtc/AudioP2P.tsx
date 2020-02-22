@@ -5,8 +5,18 @@ import {
   RTCPeerConnectionConfig,
   offerAndAnswerOptions
 } from "../../../../config/webrtc";
+import { currentMeeting } from "../../../../reducers/meeting/interfaces";
+import { Avatar } from "antd";
+import STT from "../stt/STT";
+import { connect } from "react-redux";
+import { GET_MEETING_REQUEST } from "../../../../reducers/meeting/actions";
 
-type Props = { alert: any; socket: any };
+type Props = {
+  socket: any;
+  currentMeeting: currentMeeting;
+  meetingId: string;
+  getCurrentMeeting: Function;
+};
 type States = { isCallDisable: boolean; connectionSuccess: boolean };
 class Audio extends Component<Props, States> {
   //types
@@ -33,17 +43,18 @@ class Audio extends Component<Props, States> {
 
     this.props.socket.on("offer", sdp => {
       this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
-      this.props.alert.show("answer the call");
       console.log("answer");
       this.pc.createAnswer(offerAndAnswerOptions).then(sdp => {
         // console.log(JSON.stringify(sdp))
         // set answer sdp as local description
         this.pc.setLocalDescription(sdp);
+        this.props.getCurrentMeeting(this.props.meetingId);
         this.sendToPeer("answer", sdp);
       });
     });
     this.props.socket.on("answer", sdp => {
       this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
+      this.props.getCurrentMeeting(this.props.meetingId);
     });
 
     this.props.socket.on("candidate", candidate => {
@@ -63,7 +74,7 @@ class Audio extends Component<Props, States> {
     };
     this.pc.ontrack = e => {
       console.log("ontrack", e.streams[0]);
-      if (e.streams && e.streams[0]) {
+      if (e.streams && e.streams[0] && this.remoteVideoRef && e.streams[0]) {
         this.remoteVideoRef.current.srcObject = e.streams[0];
       }
     };
@@ -84,7 +95,6 @@ class Audio extends Component<Props, States> {
 
   _onCallButton = () => {
     // alert message
-    this.props.alert.info("calling start");
 
     this.setState({ isCallDisable: true });
     console.log("offer");
@@ -108,28 +118,36 @@ class Audio extends Component<Props, States> {
   render() {
     return (
       <div>
-        <video id="local-video" ref={this.localVideoRef} autoPlay playsInline />
         <video
+          style={{ width: 0 }}
+          id="local-video"
+          ref={this.localVideoRef}
+          autoPlay
+          playsInline
+        />
+        <video
+          style={{ width: 0 }}
           id="remote-video"
-          style={{
-            width: 100,
-            height: 100,
-            marginLeft: 10,
-            backgroundColor: "black"
-          }}
           ref={this.remoteVideoRef}
           autoPlay
           playsInline
         />
-        <button
-          onClick={this._onCallButton}
-          disabled={this.state.isCallDisable}
-        >
-          콜 하기
-        </button>
+        <STT
+          socket={this.props.socket}
+          currentMeeting={this.props.currentMeeting}
+          meetingId={this.props.meetingId}
+          handleCallP2P={this._onCallButton}
+        />
       </div>
     );
   }
 }
 
-export default withAlert()(Audio);
+const mapDispatchTopProps = dispatch => {
+  return {
+    getCurrentMeeting: meetingId =>
+      dispatch({ type: GET_MEETING_REQUEST, payload: meetingId })
+  };
+};
+
+export default connect(state => ({ state }), mapDispatchTopProps)(Audio);

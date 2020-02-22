@@ -59,7 +59,7 @@ function* watchCreateMeeting() {
 }
 
 function getMeetingsAPI(data) {
-  return axios.get(`/meetings?page=${data.page}&perpage=8`);
+  return axios.get(`/meetings?page=${data.page}&perpage=5`);
 }
 
 function* getMeetings(action) {
@@ -67,7 +67,10 @@ function* getMeetings(action) {
     const result = yield call(getMeetingsAPI, action.payload);
     yield put({
       type: GET_MEETINGS_SUCCESS,
-      result: result.data.result
+      result: {
+        result: result.data.result,
+        lastPage: result.data.lastPage
+      }
     });
   } catch (error) {
     console.error(error);

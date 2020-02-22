@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { DELETE_AGENDA } from "../../../reducers/meeting/actions";
+import { Icon, Typography } from "antd";
+import styled from "styled-components";
 
 const Agenda = ({ agenda }) => {
   const dispatch = useDispatch();
@@ -13,14 +15,32 @@ const Agenda = ({ agenda }) => {
     });
   };
   return (
-    <div className="agenda">
-      <p className="agenda-name">안건 이름 {agenda.name}</p>
-      <p className="agenda-expectedTime">예상 시간 {agenda.expectedTime}</p>
-      <button className="agenda-delete" onClick={_onDeleteButton}>
-        삭제
-      </button>
-    </div>
+    <AgendaDiv>
+      <Typography.Title className="agenda-name">{agenda.name}</Typography.Title>
+      <InlineDiv>
+        <h1 className="agenda-expectedTime">{agenda.expectedTime}분</h1>
+        <Icon
+          style={{ fontSize: 30 }}
+          type="delete"
+          className="agenda-delete"
+          onClick={_onDeleteButton}
+        />
+      </InlineDiv>
+    </AgendaDiv>
   );
 };
+
+const InlineDiv = styled.div`
+  display: grid;
+`;
+
+const AgendaDiv = styled.div`
+  border: 1px solid;
+  border-radius: 1rem;
+  margin: 10px;
+  text-align: center;
+  display: inline-block;
+  min-width: 200px;
+`;
 
 export default Agenda;

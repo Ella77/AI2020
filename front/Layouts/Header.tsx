@@ -43,32 +43,29 @@ const Header = () => {
             >
               <Link href="/meeting/list">
                 <a>
-                  <Icon style={{ fontSize: MyfontSize }} type="video-camera" />
+                  <Icon style={{ fontSize: MyfontSize }} type="message" />
                 </a>
               </Link>
             </ul>
             <ul onClick={_onClickLogout}>
               <Link href="/">
-                <a>
-                  <Icon style={{ fontSize: MyfontSize }} type="logout" />
-                </a>
+                <a>로그아웃</a>
               </Link>
+            </ul>
+            <ul>
+              <Avatar size={MyfontSize}>{me.nickname}</Avatar>
             </ul>
           </>
         ) : (
           <>
             <ul>
               <Link href="/login">
-                <a>
-                  <Icon style={{ fontSize: MyfontSize }} type="login" />
-                </a>
+                <a>로그인</a>
               </Link>
             </ul>
             <ul>
               <Link href="/signUp">
-                <a>
-                  <Icon style={{ fontSize: MyfontSize }} type="enter" />
-                </a>
+                <a>회원가입</a>
               </Link>
             </ul>
           </>

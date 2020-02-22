@@ -23,7 +23,7 @@ const MeetingContainer = ({ meetingId }) => {
     }
   }, []);
   return (
-    <div>
+    <>
       <p></p>
       {isNotFirst && (
         <>
@@ -34,7 +34,7 @@ const MeetingContainer = ({ meetingId }) => {
           />
         </>
       )}
-    </div>
+    </>
   );
 };
 

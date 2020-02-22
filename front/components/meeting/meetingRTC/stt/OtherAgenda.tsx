@@ -24,6 +24,7 @@ const Agenda = ({ agenda, index, sequenceNumberOfCurrentAgenda }) => {
 
 const EndAgendaDiv = styled.div`
   display: inline-block;
+
   padding: 70px;
   border: solid 2.5px #c8c9ce;
   border-radius: 50%;
@@ -43,7 +44,6 @@ const AgendaDiv = styled.div`
   border-radius: 50%;
   margin-right: 20px;
   cursor: pointer;
-
   p {
     max-width: 80px;
     font-size: 12px;

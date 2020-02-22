@@ -6,12 +6,25 @@ import { store } from "../../reducers/indext.type";
 import styled from "styled-components";
 import Link from "next/link";
 import MeetingList from "../../components/meeting/MeetingList";
+import { useRouter } from "next/router";
 
 const list = () => {
   const { meetings } = useSelector((state: store) => state.meeting.meeting);
+  const { me } = useSelector((state: store) => state.user);
+  const router = useRouter();
   const [newMeetingList, setNewMeetingList] = useState([]);
   const [progressList, setProgressList] = useState([]);
   const [completedList, setCompletedList] = useState([]);
+  const [first, setFirst] = useState(true);
+
+  useEffect(() => {
+    if (!first) {
+      if (!me) {
+        router.replace("/login");
+      }
+    }
+    setFirst(false);
+  }, [me]);
 
   useEffect(() => {
     if (meetings) {
@@ -26,6 +39,14 @@ const list = () => {
       });
     }
   }, [meetings]);
+  if (!me) {
+    return (
+      <Div>
+        <h1>정말 반갑습니다</h1>
+        <h1>하지만 로그인이 필요합니다ㅠㅠ</h1>
+      </Div>
+    );
+  }
 
   return (
     <>
@@ -108,6 +129,15 @@ const list = () => {
 const CardCover = styled.div`
   .ant-card.ant-card-bordered {
     width: 500px;
+  }
+`;
+
+const Div = styled.div`
+  justify-content: center;
+  margin-top: 350px;
+  h1 {
+    color: white;
+    font-size: 30px;
   }
 `;
 

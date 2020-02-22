@@ -117,7 +117,7 @@ class Audio extends Component<Props, States> {
 
   render() {
     return (
-      <div>
+      <>
         <video
           style={{ width: 0 }}
           id="local-video"
@@ -138,7 +138,7 @@ class Audio extends Component<Props, States> {
           meetingId={this.props.meetingId}
           handleCallP2P={this._onCallButton}
         />
-      </div>
+      </>
     );
   }
 }

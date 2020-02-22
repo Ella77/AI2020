@@ -4,40 +4,48 @@ import { MeetingModel } from "../model/meeting";
 import { UserModel } from "../model/user";
 import { ObjectId } from "bson";
 
-export const sendMeetingStateChangeEvent = (io: socketIo.Server, meetingId: string, state: 1 | 2) => {
-  io.to(meetingId.toString()).emit('stateChange', 
-    {
-      type: 1, // 회의 상태 변경
-      state
-    }
-  );
+export const sendMeetingStateChangeEvent = (
+  io: socketIo.Server,
+  meetingId: string,
+  state: 1 | 2
+) => {
+  io.to(meetingId.toString()).emit("stateChange", {
+    type: 1, // 회의 상태 변경
+    state
+  });
 };
 
-export const sendCurrentAgendaChangeEvnet = (io: socketIo.Server, meetingId: string, sequenceNumber: number) => {
-  io.to(meetingId.toString()).emit('stateChange', 
-    {
-      type: 2, // 의제 변경
-      sequenceNumberOfCurrentAgenda: sequenceNumber
-    }
-  );
+export const sendCurrentAgendaChangeEvnet = (
+  io: socketIo.Server,
+  meetingId: string,
+  sequenceNumber: number
+) => {
+  io.to(meetingId.toString()).emit("stateChange", {
+    type: 2, // 의제 변경
+    sequenceNumberOfCurrentAgenda: sequenceNumber
+  });
 };
 
-const sendOnlineUsersChangeEvent = (io: socketIo.Server, meetingId: string, onlineUsers: string[]) => {
-  io.to(meetingId.toString()).emit('stateChange', 
-    {
-      type: 3, // 온라인 유저 변경
-      onlineUsers
-    }
-  );
+const sendOnlineUsersChangeEvent = (
+  io: socketIo.Server,
+  meetingId: string,
+  onlineUsers: string[]
+) => {
+  io.to(meetingId.toString()).emit("stateChange", {
+    type: 3, // 온라인 유저 변경
+    onlineUsers
+  });
 };
 
-const sendKeywordAddEvent = (io: socketIo.Server, meetingId: string, keywordToAdd: string) => {
-  io.to(meetingId.toString()).emit('stateChange', 
-    {
-      type: 4, // 키워드 추가
-      keywordToAdd
-    }
-  );
+const sendKeywordAddEvent = (
+  io: socketIo.Server,
+  meetingId: string,
+  keywordToAdd: string
+) => {
+  io.to(meetingId.toString()).emit("stateChange", {
+    type: 4, // 키워드 추가
+    keywordToAdd
+  });
 };
 
 export const socketEventsInject = (io: socketIo.Server) => {
@@ -133,18 +141,23 @@ export const socketEventsInject = (io: socketIo.Server) => {
     });
 
     socket.on("talk", data => {
+      console.log(data);
       const [userId, meetingId] = socketEnterInfo.get(socket.id)!;
+      console.log("aaaa");
+      console.log(userId, meetingId);
       const lastTalkingInfo = rawTalkings.get(meetingId)!;
       if (!lastTalkingInfo[0]) {
         // 처음 대화 시작
         rawTalkings.set(meetingId, [userId, data.talking]);
+        io.to(meetingId).emit("talk", {
+          speaker: userId,
+          talking: data.talking
+        });
       } else if (lastTalkingInfo[0] === userId) {
         // 기존 화자가 이어서 말할 때
         const newTalking = lastTalkingInfo[1] + data.talking;
         rawTalkings.set(meetingId, [userId, newTalking]);
-        socket.broadcast
-          .to(meetingId)
-          .emit("talk", { speaker: userId, talking: newTalking });
+        io.to(meetingId).emit("talk", { speaker: userId, talking: newTalking });
       } else {
         // 화자가 변경되었을 때
         const lastTalkingInfo = rawTalkings.get(meetingId)!;
@@ -152,9 +165,10 @@ export const socketEventsInject = (io: socketIo.Server) => {
         // TODO lastTalkingInfo[1] 분석
         // TODO Keyword 생성
         rawTalkings.set(meetingId, [userId, data.talking]);
-        socket.broadcast
-          .to(meetingId)
-          .emit("talk", { speaker: userId, talking: data.talking });
+        io.to(meetingId).emit("talk", {
+          speaker: userId,
+          talking: data.talking
+        });
       }
     });
 
@@ -171,7 +185,11 @@ export const socketEventsInject = (io: socketIo.Server) => {
             .get(enterInfo[1])!
             .filter(existsUserId => existsUserId !== enterInfo[0])
         );
-        sendOnlineUsersChangeEvent(io, enterInfo[1], onlineUsers.get(enterInfo[1])!);
+        sendOnlineUsersChangeEvent(
+          io,
+          enterInfo[1],
+          onlineUsers.get(enterInfo[1])!
+        );
       }
       socketEnterInfo.delete(socket.id);
     });

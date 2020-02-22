@@ -5,21 +5,37 @@ import {
   DELETE_AGENDA,
   CREATE_MEETING_REQUEST,
   CREATE_MEETING_SUCCESS,
-  CREATE_MEETING_FAILURE
+  CREATE_MEETING_FAILURE,
+  GET_MEETINGS_REQUEST,
+  GET_MEETINGS_SUCCESS,
+  GET_MEETINGS_FAILURE,
+  GET_MY_MEETINGS_REQUEST,
+  GET_MY_MEETINGS_SUCCESS,
+  GET_MY_MEETINGS_FAILURE,
+  GET_MEETING_REQUEST,
+  GET_MEETING_SUCCESS,
+  GET_MEETING_FAILURE
 } from "./actions";
 
 const initialState: meetingStore = {
   meeting: {
     meetings: null,
     currentMeeting: {
-      id: null,
+      _id: null,
       agendas: null,
-      name: null
+      createdAt: null,
+      name: null,
+      updatedAt: null,
+      participants: null,
+      sequenceNumberOfCurrentAgenda: null,
+      state: null
     },
+    lastPage: 1,
     currentAgendas: []
   },
   loadingStates: {
-    isCreatingMeeting: false
+    isCreatingMeeting: false,
+    isGetMeetings: false
   },
   metaStates: {}
 };
@@ -44,13 +60,53 @@ export default (state = initialState, action) => {
       }
       case CREATE_MEETING_SUCCESS: {
         draft.loadingStates.isCreatingMeeting = false;
-        draft.meeting.currentMeeting.id = action.result;
+        draft.meeting.currentMeeting._id = action.result;
       }
       case CREATE_MEETING_FAILURE: {
         draft.loadingStates.isCreatingMeeting = false;
         break;
       }
 
+      case GET_MEETINGS_REQUEST: {
+        draft.loadingStates.isGetMeetings = true;
+        break;
+      }
+      case GET_MEETINGS_SUCCESS: {
+        draft.loadingStates.isGetMeetings = false;
+        draft.meeting.meetings = action.result.result;
+        draft.meeting.lastPage = action.result.lastPage;
+        break;
+      }
+      case GET_MEETINGS_FAILURE: {
+        draft.loadingStates.isGetMeetings = false;
+        break;
+      }
+
+      case GET_MY_MEETINGS_REQUEST: {
+        break;
+      }
+
+      case GET_MY_MEETINGS_SUCCESS: {
+        draft.meeting.meetings = action.result;
+
+        break;
+      }
+
+      case GET_MY_MEETINGS_FAILURE: {
+        break;
+      }
+
+      case GET_MEETING_REQUEST: {
+        break;
+      }
+
+      case GET_MEETING_SUCCESS: {
+        draft.meeting.currentMeeting = action.result;
+        break;
+      }
+      case GET_MEETING_FAILURE: {
+        break;
+      }
       default: {
         break;
       }

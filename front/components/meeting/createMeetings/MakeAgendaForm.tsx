@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { MAKE_AGENDA } from "../../../reducers/meeting/actions";
 import { Form, Button, Input, Icon, InputNumber } from "antd";
+import styled from "styled-components";
 
 const MakeAgenda = () => {
   const [name, setName] = useState("");
@@ -23,7 +24,7 @@ const MakeAgenda = () => {
   };
 
   return (
-    <>
+    <AgendaDiv>
       <Form.Item label="안건 이름">
         <Input
           prefix={<Icon type="time" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -32,6 +33,7 @@ const MakeAgenda = () => {
         />
       </Form.Item>
       <Form.Item label="에상 걸리는 시간(분)">
+        <Icon type="clock-circle" style={{ fontSize: 20, paddingRight: 10 }} />
         <InputNumber
           value={expectedTime}
           type=""
@@ -40,13 +42,16 @@ const MakeAgenda = () => {
           }}
           step={1}
         />
+        <Icon
+          style={{ fontSize: 30, float: "right" }}
+          type="plus-circle"
+          onClick={_onCreateAgenda}
+        />
       </Form.Item>
-
-      <Button type="primary" onClick={_onCreateAgenda}>
-        생성
-      </Button>
-    </>
+    </AgendaDiv>
   );
 };
+
+const AgendaDiv = styled.div``;
 
 export default MakeAgenda;

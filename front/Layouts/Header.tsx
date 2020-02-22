@@ -3,8 +3,10 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "../reducers/indext.type";
 import { LOGOUT, LOAD_USER_REQUEST } from "../reducers/user/actions";
-import { Icon } from "antd";
+import { Icon, Avatar } from "antd";
 import styled from "styled-components";
+
+const MyfontSize = 40;
 
 const Header = () => {
   const { me } = useSelector((state: store) => state.user);
@@ -27,23 +29,30 @@ const Header = () => {
         <ul>
           <Link href="/">
             <a>
-              <Icon style={{ fontSize: 30 }} type="home" />
+              <Icon style={{ fontSize: MyfontSize }} type="home" />
             </a>
           </Link>
         </ul>
         {me ? (
           <>
             <ul>
-              <Link href="/meeting">
+              <Link href="/meeting/list">
                 <a>
-                  <Icon style={{ fontSize: 30 }} type="video-camera" />
+                  <Icon style={{ fontSize: MyfontSize }} type="video-camera" />
                 </a>
               </Link>
             </ul>
             <ul onClick={_onClickLogout}>
               <Link href="/">
                 <a>
-                  <Icon style={{ fontSize: 30 }} type="logout" />
+                  <Icon style={{ fontSize: MyfontSize }} type="logout" />
+                </a>
+              </Link>
+            </ul>
+            <ul>
+              <Link href="/profile">
+                <a>
+                  <Avatar size={MyfontSize}>{me.nickname}</Avatar>
                 </a>
               </Link>
             </ul>

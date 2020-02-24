@@ -4,9 +4,10 @@
  */
 
 import app from "../src/app";
-import http from "http";
+import https from "https";
 import socketIo from "socket.io";
 import { socketEventsInject } from "../src/services/socketio";
+import fs from 'fs';
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +21,12 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const options = {
+  key: fs.readFileSync('../certificates/private.key', 'utf8'),
+  cert: fs.readFileSync('../certificates/certificate.crt', 'utf8')
+};
+
+const server = https.createServer(options, app);
 const io = socketIo(server, { pingTimeout: 60000 });
 export { io };
 socketEventsInject(io);

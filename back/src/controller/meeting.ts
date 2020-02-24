@@ -175,41 +175,43 @@ export const Deepsearch = wrapper(async (req, res) => {
   if (invalid) {
     return res.status(400).json({msg: invalid});
   }
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const entity= require('../services/api/entity.js');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const image = require('../services/api/image.js');
-  var result = [];
-  if (type=='Location'){
+  const result = [];
+  if (input.type=='Location'){
     try {
       result.push({"imageurls":image.getImage(name)});
     }
     catch{
-      result.push({"imageurls":NaN})
+      result.push({"imageurls":NaN});
     }
     try {
       result.push({"description":entity.getDescription(name)});
     }
     catch{
-      result.push({"description":NaN})
+      result.push({"description":NaN});
     }
     try{
       result.push({"islocation":entity.getLocation(name)});
     }
     catch{
-      result.push({"islocation":NaN})
+      result.push({"islocation":NaN});
     }
   }
-  if (type=='Person' || 'Organization') {
+  if (input.type=='Person' || 'Organization') {
     try {
       result.push(entity.getDescription(name));
     }
     catch{
-      result.push({"description":NaN})
+      result.push({"description":NaN});
     }
     try {
       result.push({"imageurls":image.getImage(name)});
     }
     catch{
-      result.push({"imageurls":NaN})
+      result.push({"imageurls":NaN});
     }
 
   }

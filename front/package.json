@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "start": "next start",
+    "ssl": "node server.js",
+    "dev": "next -p 80",
+    "start": "next start -p 80",
     "build": "next build && next export"
   },
   "author": "",

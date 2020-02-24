@@ -139,3 +139,4 @@ back/package-lock.json
 back/yarn.lock
 back/src/config/store
 back/yarn-error.log
+certificates/*

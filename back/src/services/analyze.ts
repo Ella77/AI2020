@@ -32,6 +32,7 @@ function concatstring(array: Record[] ){
   for (let i =0;i<array.length;i++){
     str += array[i].sentence;
   }
+  return str;
 }
   
 /**

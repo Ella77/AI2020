@@ -16,7 +16,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "file-type": "^12.4.0",
+    "file-type": "^16.5.4",
     "fs-extra": "^8.1.0",
     "jsonfile": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
